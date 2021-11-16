@@ -1,0 +1,31 @@
+name: RickAndMorty
+options: 
+  deploymentTarget: 
+    iOS: 14.5
+
+targets: 
+  RickAndMorty:
+    type: application
+    platform: iOS
+    deploymentTarget: 
+      iOS: 14.5
+    sources: Sources
+  RickAndMortyTests:
+    type: bundle.unit-test
+    platform: iOS
+    deploymentTarget: 
+      iOS: 14.5
+    sources: Tests
+    dependencies: 
+      - target: RickAndMorty
+
+schemes:
+  RickAndMorty:
+    build: 
+      targets: 
+        RickAndMorty: all
+    test: 
+      targets: 
+        - name: RickAndMortyTests
+          parallelizable: false
+          randomExecutionOrder: true
