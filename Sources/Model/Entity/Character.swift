@@ -7,8 +7,7 @@
 
 import Foundation
 
-@frozen
-public struct Character: Decodable {
+struct Character: Decodable {
     let name: String
     let status: CharacterStatus
     let species: String
@@ -18,13 +17,13 @@ public struct Character: Decodable {
     let image: URL
 }
 
-public enum CharacterStatus: String, Decodable {
+enum CharacterStatus: String, Decodable {
     case alive
     case dead
     case unknown
 }
 
-public enum CharacterGender: String, Decodable {
+enum CharacterGender: String, Decodable {
     case female
     case male
     case genderless
