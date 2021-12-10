@@ -10,6 +10,11 @@ targets:
     deploymentTarget: 
       iOS: 14.5
     sources: Sources
+    info:
+      path: Sources/Supporting Files/Info.plist
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.rickandmorty
   RickAndMortyTests:
     type: bundle.unit-test
     platform: iOS
