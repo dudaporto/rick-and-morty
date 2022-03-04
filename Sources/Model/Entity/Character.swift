@@ -17,12 +17,14 @@ struct Character: Decodable {
     let image: URL
 }
 
+@frozen
 enum CharacterStatus: String, Decodable {
     case alive
     case dead
     case unknown
 }
 
+@frozen
 enum CharacterGender: String, Decodable {
     case female
     case male
