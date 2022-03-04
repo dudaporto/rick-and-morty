@@ -4,14 +4,50 @@
 //
 //  Created by Maria Porto on 04/03/22.
 //
+
+import Foundation
+
 struct Endpoint {
     let path: ApiPath
-    let httpMethod: HTTPMethod
-    var parameters: [String: Any]?
+    let filterPath: [Int]?
+    let parameters: [String: String]?
     
-    var fullPath: String { path.fullPath }
-
-    static let character = Endpoint(path: .character, httpMethod: .get)
-    static let episose = Endpoint(path: .episode, httpMethod: .get)
-    static let location = Endpoint(path: .location, httpMethod: .get)
+    init(path: ApiPath, filterPath: [Int]? = nil, parameters: [String: String]? = nil) {
+        self.path = path
+        self.filterPath = filterPath
+        self.parameters = parameters
+    }
+    
+    var url: URL? {
+        guard var urlComponents = URLComponents(string: path.fullPath) else {
+            return nil
+        }
+        
+        if let formattedFilterPath = formattedFilterPath {
+            urlComponents.path.append(formattedFilterPath)
+        }
+        
+        urlComponents.queryItems = queryItems
+        return urlComponents.url
+    }
+    
+    private var formattedFilterPath: String? {
+        var formattedFilterPath = ""
+        filterPath?.forEach { element in
+            if !formattedFilterPath.isEmpty {
+                formattedFilterPath += ","
+            }
+            
+            formattedFilterPath += "\(element)"
+        }
+        return formattedFilterPath
+    }
+    
+    private var queryItems: [URLQueryItem]? {
+        var queryItems = [URLQueryItem]()
+        parameters?.forEach { key, value in
+            queryItems.append(URLQueryItem(name: key, value: value))
+        }
+        return queryItems
+    }
 }

@@ -6,6 +6,6 @@
 //
 
 protocol Clienting: AnyObject {
-    typealias NetworkResponse<T: Decodable> = (Result<T, Error>) -> Void
+    typealias NetworkResponse<T: Decodable> = (Result<T, ApiError>) -> Void
     var shared: Self { get }
 }
