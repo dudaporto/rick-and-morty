@@ -19,15 +19,15 @@ struct Character: Decodable {
 
 @frozen
 enum CharacterStatus: String, Decodable {
-    case alive
-    case dead
+    case Alive
+    case Dead
     case unknown
 }
 
 @frozen
 enum CharacterGender: String, Decodable {
-    case female
-    case male
-    case genderless
+    case Female
+    case Male
+    case Genderless
     case unknown
 }

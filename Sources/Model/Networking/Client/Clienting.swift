@@ -7,5 +7,5 @@
 
 protocol Clienting: AnyObject {
     typealias NetworkResponse<T: Decodable> = (Result<T, ApiError>) -> Void
-    var shared: Self { get }
+    static var shared: Self { get }
 }

@@ -14,17 +14,13 @@ final class Request<T: Decodable> {
         self.endpoint = endpoint
     }
     
-    func perform(
-        completion: @escaping (Result<T, ApiError>) -> Void
-    ) {
+    func perform(completion: @escaping (Result<T, ApiError>) -> Void) {
         guard let url = endpoint.url else {
             completion(.failure(.invalidURL))
             return
         }
         
-        let task = URLSession.shared.dataTask(with: url) { [weak self] (data, response, error) in
-            guard let self = self else { return }
-            
+        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             if let _ = error {
                 completion(.failure(.serverError))
                 return

@@ -12,7 +12,7 @@ protocol LocationClienting: Clienting {
 }
 
 final class LocationClient: LocationClienting {
-    lazy var shared = LocationClient()
+    static let shared = LocationClient()
     
     private init() { }
     

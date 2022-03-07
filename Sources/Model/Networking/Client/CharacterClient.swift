@@ -12,7 +12,7 @@ protocol CharacterClienting: Clienting {
 }
 
 final class CharacterClient: CharacterClienting {
-    lazy var shared = CharacterClient()
+    static let shared = CharacterClient()
     
     private init() { }
     
@@ -49,11 +49,11 @@ final class CharacterClient: CharacterClienting {
         species: String? = nil,
         type: String? = nil,
         gender: CharacterGender? = nil,
-        completion: @escaping NetworkResponse<[Character]>
+        completion: @escaping NetworkResponse<CharacterList>
     ) {
         let parameters = generateFilterDictionary(name: name, status: status, species: species, type: type, gender: gender)
         let endpoint = Endpoint(path: .character, parameters: parameters)
-        let request = Request<[Character]>(endpoint: endpoint)
+        let request = Request<CharacterList>(endpoint: endpoint)
         
         request.perform { result in
             completion(result)

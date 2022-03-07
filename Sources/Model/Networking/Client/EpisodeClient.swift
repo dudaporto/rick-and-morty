@@ -12,7 +12,7 @@ protocol EpisodeClienting: Clienting {
 }
 
 final class EpisodeClient: EpisodeClienting {
-    lazy var shared = EpisodeClient()
+    static let shared = EpisodeClient()
     
     private init() { }
     
