@@ -1,0 +1,10 @@
+input_dir: Sources
+output_dir: Sources/Generated/
+strings:
+  inputs: Localizable/Localizable.strings
+  outputs:
+    templateName: structured-swift5
+    output: Strings.generated.swift
+    params: 
+      publicAccess: false
+      enumName: "Strings"

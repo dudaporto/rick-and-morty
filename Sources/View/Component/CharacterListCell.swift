@@ -8,6 +8,8 @@
 import UIKit
 
 final class CharacterListCell: UITableViewCell {
+    private typealias Localizable = Strings.CharacterList.CharacterCell
+    
     private lazy var characterImage: UIImageView = {
         let image = UIImageView()
         image.clipsToBounds = true
@@ -49,6 +51,7 @@ final class CharacterListCell: UITableViewCell {
     private lazy var lastLocationTitle: UILabel = {
         let label = UILabel()
         label.font = Typography.highlightSecondaryTitle
+        label.text = Localizable.lastKnownLocation
         return label
     }()
     

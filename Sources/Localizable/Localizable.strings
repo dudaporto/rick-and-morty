@@ -1,0 +1,10 @@
+//
+//  Localizable.strings
+//  RickAndMorty
+//
+//  Created by Maria Porto on 09/03/22.
+//
+
+// MARK: - Character List
+
+"characterList.characterCell.lastKnownLocation" = "Last known location";
