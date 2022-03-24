@@ -5,17 +5,13 @@
 //  Created by Maria Porto on 04/03/22.
 //
 
-protocol CharacterClienting: Clienting {
+protocol CharacterServicing: Servicing {
     func getAllCharacters(completion: @escaping NetworkResponse<CharacterList>)
     func getCharacter(by id: Int, completion: @escaping NetworkResponse<Character>)
     func getCharacters(by ids: [Int], completion: @escaping NetworkResponse<[Character]>)
 }
 
-final class CharacterClient: CharacterClienting {
-    static let shared = CharacterClient()
-    
-    private init() { }
-    
+final class CharacterService: CharacterServicing {    
     func getAllCharacters(completion: @escaping NetworkResponse<CharacterList>) {
         let endpoint = Endpoint(path: .character)
         let request = Request<CharacterList>(endpoint: endpoint)

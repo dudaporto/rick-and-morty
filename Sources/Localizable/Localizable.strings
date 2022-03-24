@@ -7,4 +7,7 @@
 
 // MARK: - Character List
 
+"characterList.title" = "Characters";
+"characterList.subtitle" = "Search for Rick & Morty character by name and using filters";
+"characterList.searchBarPlaceholder" = "What character are you looking for?";
 "characterList.characterCell.lastKnownLocation" = "Last known location";

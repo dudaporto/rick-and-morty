@@ -23,3 +23,18 @@ extension ViewSetup where Self: UIView {
     
     func setupStyles() { }
 }
+
+extension ViewSetup where Self: UIViewController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        buildView()
+    }
+    
+    func buildView() {
+        setupHierarchy()
+        setupConstraints()
+        setupStyles()
+    }
+    
+    func setupStyles() { }
+}

@@ -12,6 +12,12 @@ import Foundation
 internal enum Strings {
 
   internal enum CharacterList {
+    /// What character are you looking for?
+    internal static let searchBarPlaceholder = Strings.tr("Localizable", "characterList.searchBarPlaceholder")
+    /// Search for Rick & Morty character by name and using filters
+    internal static let subtitle = Strings.tr("Localizable", "characterList.subtitle")
+    /// Characters
+    internal static let title = Strings.tr("Localizable", "characterList.title")
     internal enum CharacterCell {
       /// Last known location
       internal static let lastKnownLocation = Strings.tr("Localizable", "characterList.characterCell.lastKnownLocation")

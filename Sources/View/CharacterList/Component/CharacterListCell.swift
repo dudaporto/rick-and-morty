@@ -83,6 +83,13 @@ final class CharacterListCell: UITableViewCell {
         return stackView
     }()
     
+    func setup(name: String, statusColor: UIColor, statusDescription: String, locationDescription: String) {
+        nameLabel.text = name
+        statusIndicator.backgroundColor = statusColor
+        statusLabel.text = statusDescription
+        lastLocationLabel.text = locationDescription
+    }
+    
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         super.init(coder: coder)

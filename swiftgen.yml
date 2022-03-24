@@ -4,7 +4,7 @@ strings:
   inputs: Localizable/Localizable.strings
   outputs:
     templateName: structured-swift5
-    output: Strings.generated.swift
+    output: Strings.swift
     params: 
       publicAccess: false
       enumName: "Strings"

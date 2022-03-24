@@ -34,7 +34,3 @@ schemes:
         - name: RickAndMortyTests
           parallelizable: false
           randomExecutionOrder: true
-
-preBuildScripts:
-  - path: swiftgen.yml
-    name: SwiftGen
