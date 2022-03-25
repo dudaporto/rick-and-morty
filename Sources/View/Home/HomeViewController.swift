@@ -19,6 +19,7 @@ final class HomeViewController: UIViewController {
         super.viewDidLoad()
         view.addSubview(characterButton)
         navigationController?.navigationBar.prefersLargeTitles = true
+        navigationController?.navigationBar.tintColor = Palette.green1.color
         characterButton.translatesAutoresizingMaskIntoConstraints = false
         characterButton.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         characterButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true

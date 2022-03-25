@@ -26,13 +26,14 @@ final class CharacterListCell: UITableViewCell {
     private lazy var characterImage: UIImageView = {
         let image = UIImageView()
         image.clipsToBounds = true
-        image.backgroundColor = .green
+        image.backgroundColor = Palette.gray0.color
         return image
     }()
     
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
         label.font = Typography.highlightTitle
+        label.textColor = Palette.gray4.color
         return label
     }()
     
@@ -45,6 +46,7 @@ final class CharacterListCell: UITableViewCell {
     private lazy var statusLabel: UILabel = {
         let label = UILabel()
         label.font = Typography.info
+        label.textColor = Palette.gray3.color
         return label
     }()
     
@@ -66,12 +68,14 @@ final class CharacterListCell: UITableViewCell {
         let label = UILabel()
         label.font = Typography.highlightSecondaryTitle
         label.text = Localizable.lastKnownLocation
+        label.textColor = Palette.gray4.color
         return label
     }()
     
     private lazy var lastLocationLabel: UILabel = {
         let label = UILabel()
         label.font = Typography.info
+        label.textColor = Palette.gray3.color
         return label
     }()
     
@@ -128,7 +132,7 @@ extension CharacterListCell: ViewSetup {
     }
     
     func setupStyles() {
-        rootStackView.border(color: .green, width: 1, opacity: 0.25, radius: 12)
-        backgroundColor = .systemBackground
+        rootStackView.border(color: Palette.green1.color, width: 1, opacity: 0.25, radius: 12)
+        backgroundColor = Palette.background.color
     }
 }

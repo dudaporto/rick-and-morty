@@ -24,11 +24,15 @@ final class CharacterListViewController: UIViewController {
         label.font = Typography.title
         label.text = Localizable.subtitle
         label.numberOfLines = 0
+        label.textColor = Palette.gray2.color
         return label
     }()
 
     private lazy var searchField: UISearchTextField = {
         let search = UISearchTextField()
+        search.backgroundColor = Palette.gray0.color
+        search.textColor = Palette.gray2.color
+        search.tintColor = Palette.gray2.color
         search.placeholder = Localizable.searchBarPlaceholder
         return search
     }()
@@ -72,7 +76,7 @@ extension CharacterListViewController: ViewSetup {
     }
     
     func setupStyles() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = Palette.background.color
     }
 }
 

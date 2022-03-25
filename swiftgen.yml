@@ -8,3 +8,10 @@ strings:
     params: 
       publicAccess: false
       enumName: "Strings"
+xcassets:
+  - inputs: Design System/Palette.xcassets
+    outputs:
+      - templateName: swift5
+        output: Palette.swift
+        params:
+          enumName: Palette
