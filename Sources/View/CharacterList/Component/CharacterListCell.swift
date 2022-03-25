@@ -7,12 +7,26 @@
 
 import UIKit
 
+extension CharacterListCell.Contants {
+    enum Insets {
+        static let cell = UIEdgeInsets(vertical: Spacing.space1)
+    }
+    
+    enum Size {
+        static let image: CGFloat = 120
+        static let status: CGFloat = 12
+    }
+}
+
 final class CharacterListCell: UITableViewCell {
+    fileprivate enum Contants { }
+    
     private typealias Localizable = Strings.CharacterList.CharacterCell
     
     private lazy var characterImage: UIImageView = {
         let image = UIImageView()
         image.clipsToBounds = true
+        image.backgroundColor = .green
         return image
     }()
     
@@ -24,7 +38,7 @@ final class CharacterListCell: UITableViewCell {
     
     private lazy var statusIndicator: UIView = {
         let cicledView = UIView()
-        cicledView.border(radius: 5)
+        cicledView.border(radius: 6)
         return cicledView
     }()
     
@@ -90,6 +104,11 @@ final class CharacterListCell: UITableViewCell {
         lastLocationLabel.text = locationDescription
     }
     
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        buildView()
+    }
+    
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         super.init(coder: coder)
@@ -99,14 +118,17 @@ final class CharacterListCell: UITableViewCell {
 
 extension CharacterListCell: ViewSetup {
     func setupConstraints() {
-        addSubview(rootStackView)
+        rootStackView.fitToParent(with: Contants.Insets.cell)
     }
     
     func setupHierarchy() {
-        rootStackView.fitToParent()
+        contentView.addSubview(rootStackView)
+        characterImage.size(Contants.Size.image)
+        statusIndicator.size(Contants.Size.status)
     }
     
     func setupStyles() {
-        border(color: .green, width: 1, opacity: 0.25, radius: 12)
+        rootStackView.border(color: .green, width: 1, opacity: 0.25, radius: 12)
+        backgroundColor = .systemBackground
     }
 }

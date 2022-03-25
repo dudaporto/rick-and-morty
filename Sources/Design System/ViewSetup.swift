@@ -25,11 +25,6 @@ extension ViewSetup where Self: UIView {
 }
 
 extension ViewSetup where Self: UIViewController {
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        buildView()
-    }
-    
     func buildView() {
         setupHierarchy()
         setupConstraints()
