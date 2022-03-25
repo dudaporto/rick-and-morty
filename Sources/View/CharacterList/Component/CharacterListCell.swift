@@ -7,7 +7,7 @@
 
 import UIKit
 
-extension CharacterListCell.Contants {
+extension CharacterListCell.Constants {
     enum Insets {
         static let cell = UIEdgeInsets(vertical: Spacing.space1)
     }
@@ -16,17 +16,22 @@ extension CharacterListCell.Contants {
         static let image: CGFloat = 120
         static let status: CGFloat = 12
     }
+    
+    enum Opacity {
+        static let darkBorder: CGFloat = 0.4
+        static let lightBorder: CGFloat = 0.25
+        static let shadow: Float = 0.1
+    }
 }
 
 final class CharacterListCell: UITableViewCell {
-    fileprivate enum Contants { }
+    fileprivate enum Constants { }
     
     private typealias Localizable = Strings.CharacterList.CharacterCell
     
     private lazy var characterImage: UIImageView = {
         let image = UIImageView()
         image.clipsToBounds = true
-        image.backgroundColor = Palette.gray0.color
         return image
     }()
     
@@ -39,7 +44,7 @@ final class CharacterListCell: UITableViewCell {
     
     private lazy var statusIndicator: UIView = {
         let cicledView = UIView()
-        cicledView.border(radius: 6)
+        cicledView.border(radius: Radius.low)
         return cicledView
     }()
     
@@ -101,6 +106,12 @@ final class CharacterListCell: UITableViewCell {
         return stackView
     }()
     
+    private lazy var cellContainer: UIView = {
+        let view = UIView()
+        view.backgroundColor = Palette.background.color
+        return view
+    }()
+    
     func setup(name: String, statusColor: UIColor, statusDescription: String, locationDescription: String) {
         nameLabel.text = name
         statusIndicator.backgroundColor = statusColor
@@ -116,23 +127,43 @@ final class CharacterListCell: UITableViewCell {
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        buildView()
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        setupStyles()
     }
 }
 
 extension CharacterListCell: ViewSetup {
     func setupConstraints() {
-        rootStackView.fitToParent(with: Contants.Insets.cell)
+        cellContainer.fitToParent(with: Constants.Insets.cell)
+        rootStackView.fitToParent()
     }
     
     func setupHierarchy() {
-        contentView.addSubview(rootStackView)
-        characterImage.size(Contants.Size.image)
-        statusIndicator.size(Contants.Size.status)
+        contentView.addSubview(cellContainer)
+        cellContainer.addSubview(rootStackView)
+        characterImage.size(Constants.Size.image)
+        statusIndicator.size(Constants.Size.status)
     }
     
     func setupStyles() {
-        rootStackView.border(color: Palette.green1.color, width: 1, opacity: 0.25, radius: 12)
+        let opacity: CGFloat
+        switch traitCollection.userInterfaceStyle {
+        case .dark:
+            opacity = Constants.Opacity.darkBorder
+        default:
+            opacity = Constants.Opacity.lightBorder
+        }
+        
+        let shadowOffset = CGSize(width: 0, height: 3)
+        cellContainer.border(color: Palette.green1.color, width: 1, opacity: opacity, radius: Radius.medium)
+        cellContainer.shadow(color: Palette.green1.color,
+                             opacity: Constants.Opacity.shadow,
+                             offset: shadowOffset,
+                             radius: 5)
+        
         backgroundColor = Palette.background.color
     }
 }
