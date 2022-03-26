@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol CharacterListViewControllerType: AnyObject {
+    func displayCharacters()
+}
+
 extension CharacterListViewController.Constants {
     enum Insets {
         static var tableView = UIEdgeInsets(horizontal: Spacing.space3)
@@ -59,8 +63,20 @@ final class CharacterListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        buildView()
         title = Localizable.title
+        buildView()
+        viewModel.fetchCharacters()
+    }
+    
+    private let viewModel: CharacterListViewModelType
+    
+    init(viewModel: CharacterListViewModelType) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
 
@@ -94,15 +110,17 @@ extension CharacterListViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        10
+        viewModel.numberOfItens()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: CharacterListCell.identifier, for: indexPath)
-        guard let characterCell = cell as? CharacterListCell else {
+        guard let characterCell = cell as? CharacterListCell,
+              let viewModel = viewModel.characterViewModel(for: indexPath.row) else {
             return UITableViewCell()
         }
-        characterCell.setup(name: "Rick", statusColor: .green, statusDescription: "Alive", locationDescription: "Earth")
+        
+        characterCell.setup(with: viewModel)
         characterCell.selectionStyle = .none
         return cell
     }
@@ -117,5 +135,11 @@ extension CharacterListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         UITableView.automaticDimension
+    }
+}
+
+extension CharacterListViewController: CharacterListViewControllerType {
+    func displayCharacters() {
+        tableView.reloadData()
     }
 }

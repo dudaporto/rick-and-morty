@@ -6,7 +6,7 @@
 //
 
 enum ApiPath: String {
-    private static let baseUrl = "https://rickandmortyapi.com/api/"
+    private static let baseUrl = "http://192.168.0.107:3005/"
     
     case character
     case episode

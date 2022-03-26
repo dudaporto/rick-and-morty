@@ -5,7 +5,7 @@
 //  Created by Maria Porto on 10/12/21.
 //
 
-import Foundation
+import UIKit
 
 struct Character: Decodable {
     let name: String
@@ -30,4 +30,17 @@ enum CharacterGender: String, Decodable {
     case Male
     case Genderless
     case unknown
+}
+
+extension CharacterStatus {
+    var color: UIColor {
+        switch self {
+        case .Alive:
+            return Palette.green0.color
+        case .Dead:
+            return Palette.red0.color
+        case .unknown:
+            return Palette.gray1.color
+        }
+    }
 }

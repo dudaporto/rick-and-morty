@@ -27,7 +27,7 @@ final class HomeViewController: UIViewController {
     }
     
     @objc func showCharacterList() {
-        let vc = CharacterListViewController()
+        let vc = CharacterListViewController(viewModel: CharacterListViewModel(service: CharacterService()))
         navigationController?.pushViewController(vc, animated: true)
     }
 }

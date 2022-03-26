@@ -112,11 +112,11 @@ final class CharacterListCell: UITableViewCell {
         return view
     }()
     
-    func setup(name: String, statusColor: UIColor, statusDescription: String, locationDescription: String) {
-        nameLabel.text = name
-        statusIndicator.backgroundColor = statusColor
-        statusLabel.text = statusDescription
-        lastLocationLabel.text = locationDescription
+    func setup(with viewModel: CharacterListCellViewModel) {
+        nameLabel.text = viewModel.name
+        statusIndicator.backgroundColor = viewModel.statusColor
+        statusLabel.text = viewModel.statusDescription
+        lastLocationLabel.text = viewModel.locationDescription
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
