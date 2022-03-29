@@ -5,10 +5,17 @@
 //  Created by Maria Porto on 04/03/22.
 //
 
+import Foundation
+
 protocol CharacterServicing: Servicing {
     func getAllCharacters(completion: @escaping NetworkResponse<CharacterList>)
     func getCharacter(by id: Int, completion: @escaping NetworkResponse<Character>)
     func getCharacters(by ids: [Int], completion: @escaping NetworkResponse<[Character]>)
+    func getFilteredCharacters(
+        name: String?,
+        filter: CharacterFilter?,
+        completion: @escaping NetworkResponse<CharacterList>
+    )
 }
 
 final class CharacterService: CharacterServicing {    
@@ -17,7 +24,9 @@ final class CharacterService: CharacterServicing {
         let request = Request<CharacterList>(endpoint: endpoint)
         
         request.perform { result in
-            completion(result)
+            DispatchQueue.main.async {
+                completion(result)
+            }
         }
     }
     
@@ -26,7 +35,9 @@ final class CharacterService: CharacterServicing {
         let request = Request<Character>(endpoint: endpoint)
         
         request.perform { result in
-            completion(result)
+            DispatchQueue.main.async {
+                completion(result)
+            }
         }
     }
     
@@ -35,24 +46,29 @@ final class CharacterService: CharacterServicing {
         let request = Request<[Character]>(endpoint: endpoint)
         
         request.perform { result in
-            completion(result)
+            DispatchQueue.main.async {
+                completion(result)
+            }
         }
     }
     
     func getFilteredCharacters(
-        name: String? = nil,
-        status: CharacterStatus? = nil,
-        species: String? = nil,
-        type: String? = nil,
-        gender: CharacterGender? = nil,
+        name: String?,
+        filter: CharacterFilter?,
         completion: @escaping NetworkResponse<CharacterList>
     ) {
-        let parameters = generateFilterDictionary(name: name, status: status, species: species, type: type, gender: gender)
+        let parameters = generateFilterDictionary(name: name,
+                                                  status: filter?.status,
+                                                  species: filter?.species,
+                                                  type: filter?.type,
+                                                  gender: filter?.gender)
         let endpoint = Endpoint(path: .character, parameters: parameters)
         let request = Request<CharacterList>(endpoint: endpoint)
         
         request.perform { result in
-            completion(result)
+            DispatchQueue.main.async {
+                completion(result)
+            }
         }
     }
     

@@ -9,6 +9,8 @@ import UIKit
 
 protocol CharacterListViewControllerType: AnyObject {
     func displayCharacters()
+    func startLoading()
+    func stopLoading()
 }
 
 extension CharacterListViewController.Constants {
@@ -34,15 +36,15 @@ final class CharacterListViewController: UIViewController {
 
     private lazy var searchField: UISearchTextField = {
         let search = UISearchTextField()
-        search.backgroundColor = Palette.gray0.color
-        search.textColor = Palette.gray2.color
-        search.tintColor = Palette.gray2.color
+        search.tintColor = Palette.green1.color
         search.placeholder = Localizable.searchBarPlaceholder
+        search.delegate = self
+        search.returnKeyType = .search
         return search
     }()
 
     private lazy var headerStackView: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [subtitleLabel, searchField])
+        let stack = UIStackView()
         stack.axis = .vertical
         stack.spacing = Spacing.space2
         stack.isLayoutMarginsRelativeArrangement = true
@@ -58,7 +60,14 @@ final class CharacterListViewController: UIViewController {
         tableView.register(CharacterListCell.self, forCellReuseIdentifier: CharacterListCell.identifier)
         tableView.backgroundColor = .clear
         tableView.showsVerticalScrollIndicator = false
+        tableView.isHidden = true
         return tableView
+    }()
+    
+    private lazy var loadingView: UIActivityIndicatorView = {
+        let loading = UIActivityIndicatorView(style: .medium)
+        loading.color = Palette.green1.color
+        return loading
     }()
     
     override func viewDidLoad() {
@@ -84,11 +93,12 @@ final class CharacterListViewController: UIViewController {
 extension CharacterListViewController: ViewSetup {
     func setupConstraints() {
         tableView.fitToParent(with: Constants.Insets.tableView)
-        searchField.height(60)
+        loadingView.fitToParent()
     }
     
     func setupHierarchy() {
-        view.addSubview(tableView)
+        view.addSubviews(tableView, loadingView)
+        headerStackView.addArrangedSubviews(subtitleLabel, searchField)
     }
     
     func setupStyles() {
@@ -141,5 +151,34 @@ extension CharacterListViewController: UITableViewDataSource {
 extension CharacterListViewController: CharacterListViewControllerType {
     func displayCharacters() {
         tableView.reloadData()
+        tableView.isHidden = false
+    }
+    
+    func startLoading() {
+        loadingView.startAnimating()
+    }
+    
+    func stopLoading() {
+        loadingView.stopAnimating()
+    }
+}
+
+extension CharacterListViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        view.endEditing(true)
+        return true
+    }
+    
+    func textFieldShouldClear(_ textField: UITextField) -> Bool {
+        textField.text = ""
+        viewModel.fetchCharacters()
+        view.endEditing(true)
+        return false
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let newText = (textField.text ?? "") + string
+        viewModel.filterCharacters(name: newText)
+        return true
     }
 }

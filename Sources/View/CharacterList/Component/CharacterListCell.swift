@@ -18,8 +18,7 @@ extension CharacterListCell.Constants {
     }
     
     enum Opacity {
-        static let darkBorder: CGFloat = 0.4
-        static let lightBorder: CGFloat = 0.25
+        static let border: CGFloat = 0.25
         static let shadow: Float = 0.1
     }
 }
@@ -117,6 +116,7 @@ final class CharacterListCell: UITableViewCell {
         statusIndicator.backgroundColor = viewModel.statusColor
         statusLabel.text = viewModel.statusDescription
         lastLocationLabel.text = viewModel.locationDescription
+       // characterImage.load(url: viewModel.imageUrl)
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -149,16 +149,11 @@ extension CharacterListCell: ViewSetup {
     }
     
     func setupStyles() {
-        let opacity: CGFloat
-        switch traitCollection.userInterfaceStyle {
-        case .dark:
-            opacity = Constants.Opacity.darkBorder
-        default:
-            opacity = Constants.Opacity.lightBorder
-        }
-        
         let shadowOffset = CGSize(width: 0, height: 3)
-        cellContainer.border(color: Palette.green1.color, width: 1, opacity: opacity, radius: Radius.medium)
+        cellContainer.border(color: Palette.green1.color,
+                             width: 1,
+                             opacity: Constants.Opacity.border,
+                             radius: Radius.medium)
         cellContainer.shadow(color: Palette.green1.color,
                              opacity: Constants.Opacity.shadow,
                              offset: shadowOffset,
