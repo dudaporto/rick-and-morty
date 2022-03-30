@@ -1,6 +1,7 @@
 import Foundation
+
 protocol CharacterListViewModelType: AnyObject {
-    func characterViewModel(for index: Int) -> CharacterListCellViewModel?
+    func characterContent(for index: Int) -> CharacterListCellContent?
     func didSelectCharacter(at index: Int)
     func fetchCharacters()
     func filterCharacters(name: String)
@@ -11,7 +12,7 @@ final class CharacterListViewModel {
     private let service: CharacterServicing
     weak var viewController: CharacterListViewControllerType?
     
-    private var charactersViewModels = [CharacterListCellViewModel]()
+    private var charactersContents = [CharacterListCellContent]()
     private var characterList: CharacterList? {
         didSet {
             mapViewModels()
@@ -26,12 +27,12 @@ final class CharacterListViewModel {
 }
 
 extension CharacterListViewModel: CharacterListViewModelType {
-    func characterViewModel(for index: Int) -> CharacterListCellViewModel? {
-        guard charactersViewModels.indices.contains(index) else {
+    func characterContent(for index: Int) -> CharacterListCellContent? {
+        guard charactersContents.indices.contains(index) else {
             return nil
         }
         
-        return charactersViewModels[index]
+        return charactersContents[index]
     }
     
     func didSelectCharacter(at index: Int) {
@@ -58,20 +59,21 @@ extension CharacterListViewModel: CharacterListViewModelType {
                 self.characterList = list
                 self.viewController?.displayCharacters()
             case .failure(let error):
+                self.viewController?.displayError()
                 print("Error: \(error.localizedDescription)")
             }
         }
     }
     
     func numberOfItens() -> Int {
-        charactersViewModels.count
+        charactersContents.count
     }
 }
 
 private extension CharacterListViewModel {
     func mapViewModels() {
-        charactersViewModels = characterList?.results.map { character in
-            CharacterListCellViewModel(
+        charactersContents = characterList?.results.map { character in
+            CharacterListCellContent(
                 name: character.name,
                 imageUrl: character.image,
                 statusColor: character.status.color,

@@ -36,7 +36,7 @@ final class CharacterListCell: UITableViewCell {
     
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
-        label.font = Typography.highlightTitle
+        label.font = Typography.highlightSecondaryTitle
         label.textColor = Palette.gray4.color
         return label
     }()
@@ -70,7 +70,7 @@ final class CharacterListCell: UITableViewCell {
     
     private lazy var lastLocationTitle: UILabel = {
         let label = UILabel()
-        label.font = Typography.highlightSecondaryTitle
+        label.font = Typography.highlightTertiaryTitle
         label.text = Localizable.lastKnownLocation
         label.textColor = Palette.gray4.color
         return label
@@ -111,11 +111,11 @@ final class CharacterListCell: UITableViewCell {
         return view
     }()
     
-    func setup(with viewModel: CharacterListCellViewModel) {
-        nameLabel.text = viewModel.name
-        statusIndicator.backgroundColor = viewModel.statusColor
-        statusLabel.text = viewModel.statusDescription
-        lastLocationLabel.text = viewModel.locationDescription
+    func setup(with content: CharacterListCellContent) {
+        nameLabel.text = content.name
+        statusIndicator.backgroundColor = content.statusColor
+        statusLabel.text = content.statusDescription
+        lastLocationLabel.text = content.locationDescription
        // characterImage.load(url: viewModel.imageUrl)
     }
     

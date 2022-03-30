@@ -14,16 +14,19 @@ fileprivate enum FontName {
 }
 
 enum Typography {
-    /// Bold 16
-    static let highlightTitle = UIFont(name: FontName.bold, size: 18)
+    /// Bold 22
+    static let highlightTitle = UIFont(name: FontName.bold, size: 22)
     
-    /// Bold 12
-    static let highlightSecondaryTitle = UIFont(name: FontName.bold, size: 14)
+    /// Bold 18
+    static let highlightSecondaryTitle = UIFont(name: FontName.bold, size: 18)
     
-    /// Regular 16
+    /// Bold 14
+    static let highlightTertiaryTitle = UIFont(name: FontName.bold, size: 14)
+    
+    /// Regular 18
     static let title = UIFont(name: FontName.regular, size: 18)
     
-    /// Regular 12
+    /// Regular 14
     static let info = UIFont(name: FontName.regular, size: 14)
 }
 

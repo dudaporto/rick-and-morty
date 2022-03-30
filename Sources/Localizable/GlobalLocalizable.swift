@@ -1,0 +1,1 @@
+typealias GlobalLocalizable = Strings.Global

@@ -9,6 +9,7 @@ import UIKit
 
 protocol CharacterListViewControllerType: AnyObject {
     func displayCharacters()
+    func displayError()
     func startLoading()
     func stopLoading()
 }
@@ -17,6 +18,7 @@ extension CharacterListViewController.Constants {
     enum Insets {
         static var tableView = UIEdgeInsets(horizontal: Spacing.space3)
         static var header = UIEdgeInsets(vertical: Spacing.space2)
+        static var infoView = UIEdgeInsets(inset: Spacing.space3)
     }
 }
 
@@ -70,6 +72,14 @@ final class CharacterListViewController: UIViewController {
         return loading
     }()
     
+    private lazy var errorInfoView: InfoView = {
+        let infoView = InfoView()
+        infoView.setup(with: .genericError)
+        infoView.delegate = self
+        infoView.isHidden = true
+        return infoView
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         title = Localizable.title
@@ -94,10 +104,11 @@ extension CharacterListViewController: ViewSetup {
     func setupConstraints() {
         tableView.fitToParent(with: Constants.Insets.tableView)
         loadingView.fitToParent()
+        errorInfoView.fitToParent(with: Constants.Insets.infoView)
     }
     
     func setupHierarchy() {
-        view.addSubviews(tableView, loadingView)
+        view.addSubviews(tableView, loadingView, errorInfoView)
         headerStackView.addArrangedSubviews(subtitleLabel, searchField)
     }
     
@@ -126,7 +137,7 @@ extension CharacterListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: CharacterListCell.identifier, for: indexPath)
         guard let characterCell = cell as? CharacterListCell,
-              let viewModel = viewModel.characterViewModel(for: indexPath.row) else {
+              let viewModel = viewModel.characterContent(for: indexPath.row) else {
             return UITableViewCell()
         }
         
@@ -152,6 +163,11 @@ extension CharacterListViewController: CharacterListViewControllerType {
     func displayCharacters() {
         tableView.reloadData()
         tableView.isHidden = false
+        errorInfoView.isHidden = true
+    }
+    
+    func displayError() {
+        errorInfoView.isHidden = false
     }
     
     func startLoading() {
@@ -177,8 +193,23 @@ extension CharacterListViewController: UITextFieldDelegate {
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        guard !string.isEmpty else {
+            viewModel.fetchCharacters()
+            return true
+        }
+        
         let newText = (textField.text ?? "") + string
         viewModel.filterCharacters(name: newText)
         return true
+    }
+}
+
+extension CharacterListViewController: InfoViewDelegate {
+    func didTapPrimaryButton() {
+        viewModel.fetchCharacters()
+    }
+    
+    func didTapSecondaryButton() {
+        // to do
     }
 }

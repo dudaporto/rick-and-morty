@@ -1,6 +1,6 @@
 import UIKit
 
-struct CharacterListCellViewModel {
+struct CharacterListCellContent {
     let name: String
     let imageUrl: URL
     let statusColor: UIColor

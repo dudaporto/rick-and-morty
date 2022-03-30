@@ -5,6 +5,12 @@
 //  Created by Maria Porto on 09/03/22.
 //
 
+// MARK: - Global
+"global.genericError.title" = "Ops! Something went wrong";
+"global.genericError.message" = "Sorry, we had a system failure! Try again.";
+"global.genericError.tryAgain" = "Try again";
+"global.genericError.notNow" = "Not now";
+
 // MARK: - Character List
 
 "characterList.title" = "Characters";

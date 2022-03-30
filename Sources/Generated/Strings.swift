@@ -23,6 +23,19 @@ internal enum Strings {
       internal static let lastKnownLocation = Strings.tr("Localizable", "characterList.characterCell.lastKnownLocation")
     }
   }
+
+  internal enum Global {
+    internal enum GenericError {
+      /// Sorry, we had a system failure! Try again.
+      internal static let message = Strings.tr("Localizable", "global.genericError.message")
+      /// Not now
+      internal static let notNow = Strings.tr("Localizable", "global.genericError.notNow")
+      /// Ops! Something went wrong
+      internal static let title = Strings.tr("Localizable", "global.genericError.title")
+      /// Try again
+      internal static let tryAgain = Strings.tr("Localizable", "global.genericError.tryAgain")
+    }
+  }
 }
 // swiftlint:enable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:enable nesting type_body_length type_name vertical_whitespace_opening_braces
