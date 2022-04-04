@@ -8,6 +8,7 @@
 import UIKit
 
 struct Character: Decodable {
+    let id: Int
     let name: String
     let status: CharacterStatus
     let species: String

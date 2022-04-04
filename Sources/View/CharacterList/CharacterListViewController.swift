@@ -137,12 +137,13 @@ extension CharacterListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: CharacterListCell.identifier, for: indexPath)
         guard let characterCell = cell as? CharacterListCell,
-              let viewModel = viewModel.characterContent(for: indexPath.row) else {
+              let content = viewModel.characterContent(for: indexPath.row) else {
             return UITableViewCell()
         }
         
-        characterCell.setup(with: viewModel)
+        characterCell.setup(with: content)
         characterCell.selectionStyle = .none
+        viewModel.loadImage(for: characterCell, at: indexPath.row)
         return cell
     }
     

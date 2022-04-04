@@ -28,9 +28,13 @@ final class CharacterListCell: UITableViewCell {
     
     private typealias Localizable = Strings.CharacterList.CharacterCell
     
+    private(set) var imageIdentifier: Int?
+    
     private lazy var characterImage: UIImageView = {
         let image = UIImageView()
-        image.clipsToBounds = true
+        image.border(radius: Radius.medium)
+        image.layer.masksToBounds = true
+        image.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
         return image
     }()
     
@@ -116,7 +120,7 @@ final class CharacterListCell: UITableViewCell {
         statusIndicator.backgroundColor = content.statusColor
         statusLabel.text = content.statusDescription
         lastLocationLabel.text = content.locationDescription
-       // characterImage.load(url: viewModel.imageUrl)
+        imageIdentifier = content.imageIdentifier
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -132,6 +136,11 @@ final class CharacterListCell: UITableViewCell {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         setupStyles()
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        characterImage.image = nil
     }
 }
 
@@ -160,5 +169,11 @@ extension CharacterListCell: ViewSetup {
                              radius: 5)
         
         backgroundColor = Palette.background.color
+    }
+}
+
+extension CharacterListCell: ImageReceiver {
+    func setImage(_ image: UIImage) {
+        characterImage.image = image
     }
 }

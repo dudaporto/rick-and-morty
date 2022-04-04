@@ -5,11 +5,13 @@ protocol CharacterListViewModelType: AnyObject {
     func didSelectCharacter(at index: Int)
     func fetchCharacters()
     func filterCharacters(name: String)
+    func loadImage(for receiver: ImageReceiver, at index: Int)
     func numberOfItens() -> Int
 }
 
 final class CharacterListViewModel {
     private let service: CharacterServicing
+    private let imageService = ImageService()
     weak var viewController: CharacterListViewControllerType?
     
     private var charactersContents = [CharacterListCellContent]()
@@ -65,6 +67,16 @@ extension CharacterListViewModel: CharacterListViewModelType {
         }
     }
     
+    func loadImage(for receiver: ImageReceiver, at index: Int) {
+        guard characterList?.results.indices.contains(index) ?? false,
+              let character = characterList?.results[index],
+              let url = URL(string: ApiPath.baseUrl + character.image.path) else {
+            return
+        }
+        
+        imageService.load(for: receiver, imageUrl: url, imageId: character.id)
+    }
+    
     func numberOfItens() -> Int {
         charactersContents.count
     }
@@ -73,13 +85,7 @@ extension CharacterListViewModel: CharacterListViewModelType {
 private extension CharacterListViewModel {
     func mapViewModels() {
         charactersContents = characterList?.results.map { character in
-            CharacterListCellContent(
-                name: character.name,
-                imageUrl: character.image,
-                statusColor: character.status.color,
-                statusDescription: character.status.rawValue.capitalizingFirstLetter(),
-                locationDescription: character.location.name
-            )
+            CharacterListCellContent(character: character)
         } ?? []
     }
     
