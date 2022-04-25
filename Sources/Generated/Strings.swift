@@ -22,6 +22,14 @@ internal enum Strings {
       /// Last known location
       internal static let lastKnownLocation = Strings.tr("Localizable", "characterList.characterCell.lastKnownLocation")
     }
+    internal enum NotFound {
+      /// Digite um novo nome e tente novamente
+      internal static let subtitle = Strings.tr("Localizable", "characterList.notFound.subtitle")
+      /// Ops! Não encontramos resultados para ”%@”
+      internal static func title(_ p1: Any) -> String {
+        return Strings.tr("Localizable", "characterList.notFound.title", String(describing: p1))
+      }
+    }
   }
 
   internal enum Global {

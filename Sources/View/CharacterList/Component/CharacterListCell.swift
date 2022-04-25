@@ -169,6 +169,7 @@ extension CharacterListCell: ViewSetup {
                              radius: 5)
         
         backgroundColor = Palette.background.color
+        selectionStyle = .none
     }
 }
 

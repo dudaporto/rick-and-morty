@@ -9,9 +9,15 @@ strings:
       publicAccess: false
       enumName: "Strings"
 xcassets:
-  - inputs: Design System/Palette.xcassets
+  - inputs: Design System/Assets/Palette.xcassets
     outputs:
       - templateName: swift5
         output: Palette.swift
         params:
           enumName: Palette
+  - inputs: Design System/Assets/Images.xcassets
+    outputs:
+      - templateName: swift5
+        output: Images.swift
+        params:
+          enumName: "Images"

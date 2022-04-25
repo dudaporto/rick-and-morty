@@ -6,7 +6,8 @@ protocol CharacterListViewModelType: AnyObject {
     func fetchCharacters()
     func filterCharacters(name: String)
     func loadImage(for receiver: ImageReceiver, at index: Int)
-    func numberOfItens() -> Int
+    func numberOfItens(for section: Int) -> Int
+    func getRearchedName() -> String
 }
 
 final class CharacterListViewModel {
@@ -14,6 +15,8 @@ final class CharacterListViewModel {
     private let imageService = ImageService()
     weak var viewController: CharacterListViewControllerType?
     
+    private var searchedName = ""
+    private var shouldDisplaySearchError = false
     private var charactersContents = [CharacterListCellContent]()
     private var characterList: CharacterList? {
         didSet {
@@ -77,8 +80,19 @@ extension CharacterListViewModel: CharacterListViewModelType {
         imageService.load(for: receiver, imageUrl: url)
     }
     
-    func numberOfItens() -> Int {
-        charactersContents.count
+    func numberOfItens(for section: Int) -> Int {
+        switch CharacterListViewController.Section(rawValue: section) {
+        case .characters:
+            return charactersContents.count
+        case .infoView:
+            return shouldDisplaySearchError ? 1 : 0
+        case .none:
+            return 0
+        }
+    }
+    
+    func getRearchedName() -> String {
+        searchedName
     }
 }
 
@@ -91,7 +105,9 @@ private extension CharacterListViewModel {
     
     func fetchFilteredCharacters(name: String) {
         clearList()
-        print("searching: \(name)")
+        print("Searching: \(name)")
+        
+        searchedName = name
         viewController?.startLoading()
         service.getFilteredCharacters(name: name, filter: nil) { [weak self] result in
             guard let self = self else { return }
@@ -99,16 +115,22 @@ private extension CharacterListViewModel {
             self.viewController?.stopLoading()
             switch result {
             case .success(let list):
+                guard !list.results.isEmpty else { fallthrough }
+                self.shouldDisplaySearchError = false
                 self.characterList = list
-                self.viewController?.displayCharacters()
-            case .failure(let error):
-                print("Error: \(error.localizedDescription)")
+            case .failure:
+                self.shouldDisplaySearchError = true
+                print("Error: ")
             }
+            
+            self.viewController?.displayCharacters()
         }
     }
     
     func clearList() {
         characterList = nil
+        searchedName = ""
+        shouldDisplaySearchError = false
         viewController?.displayCharacters()
     }
 }

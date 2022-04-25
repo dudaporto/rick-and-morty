@@ -25,6 +25,11 @@ extension CharacterListViewController.Constants {
 final class CharacterListViewController: UIViewController {
     fileprivate enum Constants { }
     
+    enum Section: Int, CaseIterable {
+        case characters
+        case infoView
+    }
+    
     private typealias Localizable = Strings.CharacterList
     
     private lazy var subtitleLabel: UILabel = {
@@ -63,6 +68,9 @@ final class CharacterListViewController: UIViewController {
         tableView.backgroundColor = .clear
         tableView.showsVerticalScrollIndicator = false
         tableView.isHidden = true
+        tableView.tableHeaderView = headerStackView
+        tableView.sectionHeaderHeight = .zero
+        tableView.sectionFooterHeight = .zero
         return tableView
     }()
     
@@ -71,6 +79,16 @@ final class CharacterListViewController: UIViewController {
         loading.color = Palette.green1.color
         return loading
     }()
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        updateHeaderViewHeight(for: tableView.tableHeaderView)
+    }
+
+    func updateHeaderViewHeight(for header: UIView?) {
+        guard let header = header else { return }
+        header.frame.size.height = header.systemLayoutSizeFitting(CGSize(width: view.bounds.width - 32.0, height: 0)).height
+    }
     
     private lazy var errorInfoView: InfoView = {
         let infoView = InfoView()
@@ -120,21 +138,46 @@ extension CharacterListViewController: ViewSetup {
 // MARK: - UITableViewDelegate
 extension CharacterListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("CLICOU \(indexPath.row)")
+        switch Section(rawValue: indexPath.section) {
+        case .characters:
+            print("CLICOU \(indexPath.row)")
+            
+        default:
+            break
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        UITableView.automaticDimension
     }
 }
 
 // MARK: - UITableViewDataSource
 extension CharacterListViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        1
+        Section.allCases.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        viewModel.numberOfItens()
+        viewModel.numberOfItens(for: section)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        switch Section(rawValue: indexPath.section) {
+        case .characters:
+            return characterCell(for: indexPath)
+            
+        case .infoView:
+            return infoViewCell(for: indexPath)
+            
+        case .none:
+            return UITableViewCell()
+        }
+    }
+}
+
+private extension CharacterListViewController {
+    func characterCell(for indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: CharacterListCell.identifier, for: indexPath)
         guard let characterCell = cell as? CharacterListCell,
               let content = viewModel.characterContent(for: indexPath.row) else {
@@ -142,21 +185,14 @@ extension CharacterListViewController: UITableViewDataSource {
         }
         
         characterCell.setup(with: content)
-        characterCell.selectionStyle = .none
         viewModel.loadImage(for: characterCell, at: indexPath.row)
         return cell
     }
     
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        headerStackView
-    }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        UITableView.automaticDimension
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        UITableView.automaticDimension
+    func infoViewCell(for indexPath: IndexPath) -> UITableViewCell {
+        let cell = CharacterNotFoundInfoCell(style: .default, reuseIdentifier: CharacterNotFoundInfoCell.identifier)
+        cell.setup(characterName: viewModel.getRearchedName())
+        return cell
     }
 }
 

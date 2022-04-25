@@ -17,3 +17,5 @@
 "characterList.subtitle" = "Search for Rick & Morty character by name and using filters";
 "characterList.searchBarPlaceholder" = "What character are you looking for?";
 "characterList.characterCell.lastKnownLocation" = "Last known location";
+"characterList.notFound.title" = "Ops! Não encontramos resultados para ”%@”";
+"characterList.notFound.subtitle" = "Digite um novo nome e tente novamente";
