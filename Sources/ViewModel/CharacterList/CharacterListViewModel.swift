@@ -74,7 +74,7 @@ extension CharacterListViewModel: CharacterListViewModelType {
             return
         }
         
-        imageService.load(for: receiver, imageUrl: url, imageId: character.id)
+        imageService.load(for: receiver, imageUrl: url)
     }
     
     func numberOfItens() -> Int {
@@ -91,7 +91,7 @@ private extension CharacterListViewModel {
     
     func fetchFilteredCharacters(name: String) {
         clearList()
-        
+        print("searching: \(name)")
         viewController?.startLoading()
         service.getFilteredCharacters(name: name, filter: nil) { [weak self] result in
             guard let self = self else { return }

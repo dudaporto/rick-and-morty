@@ -28,7 +28,7 @@ final class CharacterListCell: UITableViewCell {
     
     private typealias Localizable = Strings.CharacterList.CharacterCell
     
-    private(set) var imageIdentifier: Int?
+    weak var currentDownloadTask: Cancellable?
     
     private lazy var characterImage: UIImageView = {
         let image = UIImageView()
@@ -120,7 +120,6 @@ final class CharacterListCell: UITableViewCell {
         statusIndicator.backgroundColor = content.statusColor
         statusLabel.text = content.statusDescription
         lastLocationLabel.text = content.locationDescription
-        imageIdentifier = content.imageIdentifier
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -141,6 +140,7 @@ final class CharacterListCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         characterImage.image = nil
+        currentDownloadTask?.cancel()
     }
 }
 

@@ -194,12 +194,8 @@ extension CharacterListViewController: UITextFieldDelegate {
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        guard !string.isEmpty else {
-            viewModel.fetchCharacters()
-            return true
-        }
-        
-        let newText = (textField.text ?? "") + string
+        let fieldText = (textField.text ?? "") as NSString
+        let newText = fieldText.replacingCharacters(in: range, with: string)
         viewModel.filterCharacters(name: newText)
         return true
     }

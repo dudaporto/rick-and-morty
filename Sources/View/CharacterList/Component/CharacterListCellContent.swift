@@ -7,10 +7,6 @@ final class CharacterListCellContent {
         self.character = character
     }
     
-    var imageIdentifier: Int {
-        character.id
-    }
-    
     var name: String {
         character.name
     }
