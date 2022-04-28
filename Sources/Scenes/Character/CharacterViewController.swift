@@ -12,6 +12,11 @@ protocol CharacterViewControllerType: ImageReceiver {
 }
 
 final class CharacterViewController: UIViewController {
+    enum Section: Int, CaseIterable {
+        case info
+        case episodes
+    }
+    
     private lazy var characterImage: UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
@@ -27,6 +32,7 @@ final class CharacterViewController: UIViewController {
     private lazy var favoriteIcon: UIImageView = {
         let image = UIImageView()
         image.image = Images.heartFilled.image
+        image.tintColor = Palette.green1.color
         return image
     }()
     
@@ -83,6 +89,19 @@ final class CharacterViewController: UIViewController {
         return view
     }()
     
+    private lazy var infoTableView: UITableView = {
+        let tableView = UITableView(frame: .zero, style: .grouped)
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.separatorStyle = .none
+        tableView.showsVerticalScrollIndicator = false
+        tableView.sectionHeaderHeight = .zero
+        tableView.sectionFooterHeight = .zero
+        tableView.backgroundColor = .clear
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        return tableView
+    }()
+    
     private var topBarHeight: CGFloat {
         navigationController?.navigationBar.frame.height ?? 0 + view.safeAreaInsets.top
     }
@@ -123,6 +142,7 @@ final class CharacterViewController: UIViewController {
                            UIColor.clear.cgColor]
         gradient.locations = [0, 0.25, 1]
         
+        gradientView.layer.sublayers?.removeAll()
         gradientView.layer.insertSublayer(gradient, at: 0)
     }
 }
@@ -165,11 +185,18 @@ extension CharacterViewController: ViewSetup {
             favoriteIcon.heightAnchor.constraint(equalToConstant: 30),
             favoriteIcon.widthAnchor.constraint(equalToConstant: 30)
         ])
+        
+        NSLayoutConstraint.activate([
+            infoTableView.topAnchor.constraint(equalTo: headerStackView.bottomAnchor),
+            infoTableView.leadingAnchor.constraint(equalTo: characterInfoContainer.leadingAnchor),
+            infoTableView.trailingAnchor.constraint(equalTo: characterInfoContainer.trailingAnchor),
+            infoTableView.bottomAnchor.constraint(equalTo: characterInfoContainer.bottomAnchor)
+        ])
     }
     
     func setupHierarchy() {
         view.addSubviews(characterImage, characterInfoContainer, gradientView)
-        characterInfoContainer.addSubviews(headerStackView)
+        characterInfoContainer.addSubviews(headerStackView, infoTableView)
     }
     
     func setupStyles() {
@@ -187,5 +214,52 @@ extension CharacterViewController: CharacterViewControllerType {
 extension CharacterViewController {
     func setImage(_ image: UIImage) {
         characterImage.image = image
+    }
+}
+
+// MARK: - UITableViewDelegate
+extension CharacterViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        UITableView.automaticDimension
+    }
+}
+
+// MARK: - UITableViewDataSource
+extension CharacterViewController: UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        Section.allCases.count
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        viewModel.numberOfItens(for: section)
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        switch Section(rawValue: indexPath.section) {
+        case .info:
+            return infoCell(for: indexPath)
+            
+        case .episodes:
+            return UITableViewCell()
+            
+        case .none:
+            return UITableViewCell()
+        }
+    }
+}
+
+private extension CharacterViewController {
+    func infoCell(for indexPath: IndexPath) -> UITableViewCell {
+        guard let content = viewModel.characterInfo(for: indexPath.row) else {
+            return UITableViewCell()
+        }
+        
+        let cell = CharacterInfoCell(style: .default, reuseIdentifier: CharacterInfoCell.identifier)
+        cell.setup(content: content)
+        return cell
     }
 }
