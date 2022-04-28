@@ -26,10 +26,18 @@ final class HomeViewController: UIViewController {
         characterButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
     }
     
+    private let viewModel: HomeViewModelType
+    
+    init(viewModel: HomeViewModelType) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     @objc func showCharacterList() {
-        let viewModel = CharacterListViewModel(service: CharacterService())
-        let vc = CharacterListViewController(viewModel: viewModel)
-        viewModel.viewController = vc
-        navigationController?.pushViewController(vc, animated: true)
+        viewModel.goToCharacterList()
     }
 }

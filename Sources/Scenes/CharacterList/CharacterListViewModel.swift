@@ -11,8 +11,8 @@ protocol CharacterListViewModelType: AnyObject {
 }
 
 final class CharacterListViewModel {
+    private let coordinator: CharacterListCoordinatorType
     private let service: CharacterServicing
-    private let imageService = ImageService()
     weak var viewController: CharacterListViewControllerType?
     
     private var searchedName = ""
@@ -26,7 +26,8 @@ final class CharacterListViewModel {
     
     private var filterTimer: Timer?
     
-    init(service: CharacterServicing) {
+    init(coordinator: CharacterListCoordinatorType, service: CharacterServicing) {
+        self.coordinator = coordinator
         self.service = service
     }
 }
@@ -41,7 +42,12 @@ extension CharacterListViewModel: CharacterListViewModelType {
     }
     
     func didSelectCharacter(at index: Int) {
-        print("Open character \(index)")
+        guard characterList?.results.indices.contains(index) ?? false,
+              let character = characterList?.results[index] else {
+            return
+        }
+        
+        coordinator.coordinateToCharacterProfile(with: character)
     }
     
     func filterCharacters(name: String) {
@@ -77,7 +83,7 @@ extension CharacterListViewModel: CharacterListViewModelType {
             return
         }
         
-        imageService.load(for: receiver, imageUrl: url)
+        ImageService.shared.load(for: receiver, imageUrl: url)
     }
     
     func numberOfItens(for section: Int) -> Int {

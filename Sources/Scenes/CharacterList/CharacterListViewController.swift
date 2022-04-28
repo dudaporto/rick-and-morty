@@ -87,7 +87,8 @@ final class CharacterListViewController: UIViewController {
 
     func updateHeaderViewHeight(for header: UIView?) {
         guard let header = header else { return }
-        header.frame.size.height = header.systemLayoutSizeFitting(CGSize(width: view.bounds.width - 32.0, height: 0)).height
+        let width = view.bounds.width - Spacing.space5
+        header.frame.size.height = header.systemLayoutSizeFitting(CGSize(width: width, height: 0)).height
     }
     
     private lazy var errorInfoView: InfoView = {
@@ -103,6 +104,11 @@ final class CharacterListViewController: UIViewController {
         title = Localizable.title
         buildView()
         viewModel.fetchCharacters()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setupStyles()
     }
     
     private let viewModel: CharacterListViewModelType
@@ -132,6 +138,9 @@ extension CharacterListViewController: ViewSetup {
     
     func setupStyles() {
         view.backgroundColor = Palette.background.color
+        navigationController?.navigationBar.barStyle = .default
+        navigationController?.navigationBar.tintColor = Palette.green1.color
+        setNeedsStatusBarAppearanceUpdate()
     }
 }
 
@@ -140,7 +149,7 @@ extension CharacterListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch Section(rawValue: indexPath.section) {
         case .characters:
-            print("CLICOU \(indexPath.row)")
+            viewModel.didSelectCharacter(at: indexPath.row)
             
         default:
             break

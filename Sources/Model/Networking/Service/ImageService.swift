@@ -11,6 +11,12 @@ protocol ImageReceiver: AnyObject {
 }
 
 final class ImageService {
+    static let shared = ImageService()
+    
+    var image: UIImage?
+    
+    private init() { }
+    
     private var cache = NSCache<NSString, NSData>()
     
     func load(for receiver: ImageReceiver, imageUrl: URL) {
@@ -26,6 +32,7 @@ final class ImageService {
                 self.cache.setObject(data as NSData, forKey: imageUrl.absoluteString as NSString)
                 DispatchQueue.main.async {
                     receiver.setImage(image)
+                    self.image = image
                 }
             }
         }

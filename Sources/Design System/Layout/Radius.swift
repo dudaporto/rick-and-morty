@@ -16,4 +16,7 @@ enum Radius {
     
     /// 12
     static let medium: CGFloat = 12
+    
+    /// 16
+    static let high: CGFloat = 16
 }

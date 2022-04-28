@@ -14,6 +14,9 @@ fileprivate enum FontName {
 }
 
 enum Typography {
+    /// Bold 34
+    static let largeTitle = UIFont(name: FontName.bold, size: 34)
+    
     /// Bold 22
     static let highlightTitle = UIFont(name: FontName.bold, size: 22)
     

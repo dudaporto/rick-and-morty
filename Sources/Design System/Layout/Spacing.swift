@@ -22,4 +22,7 @@ enum Spacing {
     
     /// Space: 24
     static let space4: CGFloat = 24.0
+    
+    /// Space: 32
+    static let space5: CGFloat = 32.0
 }
