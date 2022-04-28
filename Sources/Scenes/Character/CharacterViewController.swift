@@ -20,10 +20,53 @@ final class CharacterViewController: UIViewController {
     
     private lazy var characterTitle: UILabel = {
         let name = UILabel()
-        name.text = "Name Example"
         name.font = Typography.largeTitle
-        name.translatesAutoresizingMaskIntoConstraints = false
         return name
+    }()
+    
+    private lazy var favoriteIcon: UIImageView = {
+        let image = UIImageView()
+        image.image = Images.heartFilled.image
+        return image
+    }()
+    
+    private lazy var nameStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [characterTitle, favoriteIcon])
+        stackView.axis = .horizontal
+        stackView.alignment = .center
+        stackView.spacing = Spacing.space2
+        return stackView
+    }()
+    
+    private lazy var statusIndicator: UIView = {
+        let cicledView = UIView()
+        cicledView.border(radius: Radius.low)
+        cicledView.backgroundColor = CharacterStatus.Alive.color
+        return cicledView
+    }()
+    
+    private lazy var statusLabel: UILabel = {
+        let label = UILabel()
+        label.font = Typography.title
+        label.textColor = Palette.gray3.color
+        label.text = "Alive"
+        return label
+    }()
+    
+    private lazy var statusBadgeStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [statusIndicator, statusLabel])
+        stackView.axis = .horizontal
+        stackView.alignment = .center
+        stackView.spacing = Spacing.space2
+        return stackView
+    }()
+    
+    private lazy var headerStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [nameStackView, statusBadgeStackView])
+        stackView.axis = .vertical
+        stackView.spacing = Spacing.space2
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
     }()
     
     private lazy var gradientView: UIView = {
@@ -101,9 +144,9 @@ extension CharacterViewController: ViewSetup {
         ])
         
         NSLayoutConstraint.activate([
-            characterTitle.leadingAnchor.constraint(equalTo: characterInfoContainer.leadingAnchor, constant: Spacing.space3),
-            characterTitle.topAnchor.constraint(equalTo: characterInfoContainer.topAnchor, constant: Spacing.space3),
-            characterTitle.trailingAnchor.constraint(equalTo: characterInfoContainer.trailingAnchor, constant: -Spacing.space3)
+            headerStackView.leadingAnchor.constraint(equalTo: characterInfoContainer.leadingAnchor, constant: Spacing.space3),
+            headerStackView.topAnchor.constraint(equalTo: characterInfoContainer.topAnchor, constant: Spacing.space3),
+            headerStackView.trailingAnchor.constraint(equalTo: characterInfoContainer.trailingAnchor, constant: -Spacing.space3)
         ])
         
         NSLayoutConstraint.activate([
@@ -112,11 +155,21 @@ extension CharacterViewController: ViewSetup {
             gradientView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             gradientView.heightAnchor.constraint(equalToConstant: topBarHeight)
         ])
+        
+        NSLayoutConstraint.activate([
+            statusIndicator.heightAnchor.constraint(equalToConstant: 12),
+            statusIndicator.widthAnchor.constraint(equalToConstant: 12)
+        ])
+        
+        NSLayoutConstraint.activate([
+            favoriteIcon.heightAnchor.constraint(equalToConstant: 30),
+            favoriteIcon.widthAnchor.constraint(equalToConstant: 30)
+        ])
     }
     
     func setupHierarchy() {
         view.addSubviews(characterImage, characterInfoContainer, gradientView)
-        characterInfoContainer.addSubviews(characterTitle)
+        characterInfoContainer.addSubviews(headerStackView)
     }
     
     func setupStyles() {
