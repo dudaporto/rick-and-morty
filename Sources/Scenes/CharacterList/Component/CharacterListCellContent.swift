@@ -16,7 +16,7 @@ final class CharacterListCellContent {
     }
 
     var statusDescription: String {
-        character.status.rawValue.capitalizingFirstLetter()
+        character.status.descritpion
     }
      
     var locationDescription: String {

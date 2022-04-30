@@ -32,6 +32,13 @@ internal enum Strings {
     }
   }
 
+  internal enum CharacterProfile {
+    /// About
+    internal static let aboutSectionTitle = Strings.tr("Localizable", "characterProfile.aboutSectionTitle")
+    /// Episodes
+    internal static let episodesSectionTitle = Strings.tr("Localizable", "characterProfile.episodesSectionTitle")
+  }
+
   internal enum Global {
     internal enum GenericError {
       /// Sorry, we had a system failure! Try again.

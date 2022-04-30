@@ -65,6 +65,7 @@ final class CharacterInfoCell: UITableViewCell {
         icon.image = content.icon
         titleLabel.text = content.title
         descriptionLabel.text = content.descrition
+        separatorView.isHidden = content.hideSeparatorView
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {

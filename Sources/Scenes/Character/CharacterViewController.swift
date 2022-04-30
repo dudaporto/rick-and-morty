@@ -8,13 +8,24 @@
 import UIKit
 
 protocol CharacterViewControllerType: ImageReceiver {
-    func displayCharacterInfo(name: String)
+    func displayCharacterHeader(name: String, statusColor: UIColor, statusDescription: String) 
 }
 
 final class CharacterViewController: UIViewController {
+    typealias Localizable = Strings.CharacterProfile
+    
     enum Section: Int, CaseIterable {
-        case info
+        case about
         case episodes
+        
+        var title: String {
+            switch self {
+            case .about:
+                return Localizable.aboutSectionTitle
+            case .episodes:
+                return Localizable.episodesSectionTitle
+            }
+        }
     }
     
     private lazy var characterImage: UIImageView = {
@@ -47,7 +58,6 @@ final class CharacterViewController: UIViewController {
     private lazy var statusIndicator: UIView = {
         let cicledView = UIView()
         cicledView.border(radius: Radius.low)
-        cicledView.backgroundColor = CharacterStatus.Alive.color
         return cicledView
     }()
     
@@ -55,7 +65,6 @@ final class CharacterViewController: UIViewController {
         let label = UILabel()
         label.font = Typography.title
         label.textColor = Palette.gray3.color
-        label.text = "Alive"
         return label
     }()
     
@@ -94,8 +103,6 @@ final class CharacterViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = .none
-        tableView.showsVerticalScrollIndicator = false
-        tableView.sectionHeaderHeight = .zero
         tableView.sectionFooterHeight = .zero
         tableView.backgroundColor = .clear
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -127,11 +134,6 @@ final class CharacterViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         applyGradient()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        setupStyles()
     }
     
     private func applyGradient() {
@@ -187,7 +189,7 @@ extension CharacterViewController: ViewSetup {
         ])
         
         NSLayoutConstraint.activate([
-            infoTableView.topAnchor.constraint(equalTo: headerStackView.bottomAnchor),
+            infoTableView.topAnchor.constraint(equalTo: headerStackView.bottomAnchor, constant: Spacing.space2),
             infoTableView.leadingAnchor.constraint(equalTo: characterInfoContainer.leadingAnchor),
             infoTableView.trailingAnchor.constraint(equalTo: characterInfoContainer.trailingAnchor),
             infoTableView.bottomAnchor.constraint(equalTo: characterInfoContainer.bottomAnchor)
@@ -206,8 +208,10 @@ extension CharacterViewController: ViewSetup {
 }
 
 extension CharacterViewController: CharacterViewControllerType {
-    func displayCharacterInfo(name: String) {
+    func displayCharacterHeader(name: String, statusColor: UIColor, statusDescription: String) {
         characterTitle.text = name
+        statusIndicator.backgroundColor = statusColor
+        statusLabel.text = statusDescription
     }
 }
 
@@ -240,7 +244,7 @@ extension CharacterViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch Section(rawValue: indexPath.section) {
-        case .info:
+        case .about:
             return infoCell(for: indexPath)
             
         case .episodes:
@@ -249,6 +253,22 @@ extension CharacterViewController: UITableViewDataSource {
         case .none:
             return UITableViewCell()
         }
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard let infoSection = Section(rawValue: section) else { return nil }
+        
+        let headerTile = UITextView()
+        headerTile.font = Typography.highlightSecondaryTitle
+        headerTile.textContainerInset = UIEdgeInsets(top: Spacing.space4,
+                                                     left: Spacing.space2,
+                                                     bottom: Spacing.space2,
+                                                     right: Spacing.space2)
+        headerTile.isSelectable = false
+        headerTile.backgroundColor = .clear
+        headerTile.textColor = Palette.gray3.color
+        headerTile.text = infoSection.title
+        return headerTile
     }
 }
 

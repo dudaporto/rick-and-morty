@@ -47,7 +47,10 @@ final class CharacterViewModel {
 
 extension CharacterViewModel: CharacterViewModelType {
     func fetchCharacterInfo() {
-        viewController?.displayCharacterInfo(name: character.name)
+        viewController?.displayCharacterHeader(name: character.name,
+                                               statusColor: character.status.color,
+                                               statusDescription: character.status.descritpion)
+        
         guard let viewController = viewController,
               let url = URL(string: ApiPath.baseUrl + character.image.path) else { return }
         
@@ -56,7 +59,7 @@ extension CharacterViewModel: CharacterViewModelType {
     
     func numberOfItens(for section: Int) -> Int {
         switch CharacterViewController.Section(rawValue: section) {
-        case .info:
+        case .about:
             return InfoSection.allCases.count
         case .episodes:
             return 0
@@ -71,8 +74,20 @@ extension CharacterViewModel: CharacterViewModelType {
         }
         
         let section = InfoSection.allCases[index]
+        let hideSeparatorView = index == InfoSection.allCases.count - 1
+        let description: String
+        switch section {
+        case .specie:
+            description = character.species.capitalizingFirstLetter()
+        case .location:
+            description = character.location.name.capitalizingFirstLetter()
+        case .origin:
+            description = character.origin.name.capitalizingFirstLetter()
+        }
+        
         return CharacterInfoContent(icon: section.icon.image,
                                     title: section.title,
-                                    descrition: "Sample")
+                                    descrition: description,
+                                    hideSeparatorView: hideSeparatorView)
     }
 }

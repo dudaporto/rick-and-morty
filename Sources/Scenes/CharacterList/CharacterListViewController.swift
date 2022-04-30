@@ -140,7 +140,6 @@ extension CharacterListViewController: ViewSetup {
         view.backgroundColor = Palette.background.color
         navigationController?.navigationBar.barStyle = .default
         navigationController?.navigationBar.tintColor = Palette.green1.color
-        setNeedsStatusBarAppearanceUpdate()
     }
 }
 

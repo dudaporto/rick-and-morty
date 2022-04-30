@@ -23,6 +23,10 @@ enum CharacterStatus: String, Decodable {
     case Alive
     case Dead
     case unknown
+    
+    var descritpion: String {
+        rawValue.capitalizingFirstLetter()
+    }
 }
 
 @frozen
@@ -31,6 +35,10 @@ enum CharacterGender: String, Decodable {
     case Male
     case Genderless
     case unknown
+    
+    var descritpion: String {
+        rawValue.capitalizingFirstLetter()
+    }
 }
 
 extension CharacterStatus {

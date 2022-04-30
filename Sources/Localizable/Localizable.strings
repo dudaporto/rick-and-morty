@@ -19,3 +19,8 @@
 "characterList.characterCell.lastKnownLocation" = "Last known location";
 "characterList.notFound.title" = "Ops! Não encontramos resultados para ”%@”";
 "characterList.notFound.subtitle" = "Digite um novo nome e tente novamente";
+
+// MARK: - Character Profile
+
+"characterProfile.aboutSectionTitle" = "About";
+"characterProfile.episodesSectionTitle" = "Episodes";
