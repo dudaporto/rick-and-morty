@@ -25,11 +25,11 @@ internal enum Strings {
       internal static let lastKnownLocation = Strings.tr("Localizable", "characterList.characterCell.lastKnownLocation")
     }
     internal enum NotFound {
-      /// Digite um novo nome e tente novamente
-      internal static let subtitle = Strings.tr("Localizable", "characterList.notFound.subtitle")
-      /// Ops! Não encontramos resultados para ”%@”
-      internal static func title(_ p1: Any) -> String {
-        return Strings.tr("Localizable", "characterList.notFound.title", String(describing: p1))
+      /// Enter a new name or try again
+      internal static let searchErrorSubtitle = Strings.tr("Localizable", "characterList.notFound.searchErrorSubtitle")
+      /// Oops! No results were found for ”%@”
+      internal static func searchErrorTitle(_ p1: Any) -> String {
+        return Strings.tr("Localizable", "characterList.notFound.searchErrorTitle", String(describing: p1))
       }
     }
   }
@@ -45,9 +45,7 @@ internal enum Strings {
     internal enum GenericError {
       /// Sorry, we had a system failure! Try again.
       internal static let message = Strings.tr("Localizable", "global.genericError.message")
-      /// Not now
-      internal static let notNow = Strings.tr("Localizable", "global.genericError.notNow")
-      /// Ops! Something went wrong
+      /// Oops! Something went wrong
       internal static let title = Strings.tr("Localizable", "global.genericError.title")
       /// Try again
       internal static let tryAgain = Strings.tr("Localizable", "global.genericError.tryAgain")

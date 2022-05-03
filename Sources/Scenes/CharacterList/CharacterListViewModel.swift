@@ -2,23 +2,27 @@ import Foundation
 
 protocol CharacterListViewModelType: AnyObject {
     func characterContent(for index: Int) -> CharacterListCellContent?
-    func didSelectCharacter(at index: Int)
-    func loadContent()
     func didChangeSearchName(name: String)
+    func didSelectCharacter(at index: Int)
+    func getErrorContent() -> (title: String, subtitle: String)
+    func loadContent(characterName: String?)
     func loadImage(for receiver: ImageReceiver, at index: Int)
-    func numberOfItens(for section: Int) -> Int
-    func getRearchedName() -> String
     func loadMoreCharacters()
+    func numberOfItens(for section: Int) -> Int
 }
 
 final class CharacterListViewModel {
+    private typealias Localizable = Strings.CharacterList
+    
     private let coordinator: CharacterListCoordinatorType
-    private let service: CharacterServicing
+    private let service: CharacterListServicing
     weak var viewController: CharacterListViewControllerType?
     
     private var filter = CharacterFilter()
-    private var shouldDisplaySearchError = false
+    private var filterTimer: Timer?
     private var hasNextPage = true
+    private var shouldDisplayError = false
+   
     private var charactersContents = [CharacterListCellContent]()
     private var characters = [Character]() {
         didSet {
@@ -26,9 +30,7 @@ final class CharacterListViewModel {
         }
     }
     
-    private var filterTimer: Timer?
-    
-    init(coordinator: CharacterListCoordinatorType, service: CharacterServicing) {
+    init(coordinator: CharacterListCoordinatorType, service: CharacterListServicing) {
         self.coordinator = coordinator
         self.service = service
     }
@@ -43,21 +45,30 @@ extension CharacterListViewModel: CharacterListViewModelType {
         return charactersContents[index]
     }
     
+    func didChangeSearchName(name: String) {
+        filterTimer?.invalidate()
+        filterTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { [weak self] _ in
+            self?.loadContent(characterName: name)
+        }
+    }
+    
     func didSelectCharacter(at index: Int) {
         let character = characters[index]
         coordinator.coordinateToCharacterProfile(with: character)
     }
     
-    func didChangeSearchName(name: String) {
-        filterTimer?.invalidate()
-        filterTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { [weak self] _ in
-            self?.fetchFilteredCharacters(name: name)
+    func getErrorContent() -> (title: String, subtitle: String) {
+        guard let searchedName = filter.name else {
+            return (GlobalLocalizable.GenericError.title, GlobalLocalizable.GenericError.message)
         }
+        
+        return (Localizable.NotFound.searchErrorTitle(searchedName), Localizable.NotFound.searchErrorSubtitle)
     }
     
-    func loadContent() {
+    func loadContent(characterName: String?) {
         clearList()
         viewController?.startLoading()
+        filter.name = characterName
         fetchCharacters()
     }
     
@@ -70,59 +81,39 @@ extension CharacterListViewModel: CharacterListViewModelType {
         ImageService.shared.load(for: receiver, imageUrl: url)
     }
     
+    func loadMoreCharacters() {
+        filter.page += 1
+        fetchCharacters(isLoadingMorePages: true)
+    }
+    
     func numberOfItens(for section: Int) -> Int {
         switch CharacterListViewController.Section(rawValue: section) {
         case .characters:
             return charactersContents.count
         case .infoView:
-            return shouldDisplaySearchError ? 1 : 0
+            return shouldDisplayError ? 1 : 0
         case .seeMore:
             return hasNextPage && charactersContents.count > 0 ? 1 : 0
         case .none:
             return 0
         }
     }
-    
-    func getRearchedName() -> String {
-        filter.name ?? ""
-    }
-    
-    func loadMoreCharacters() {
-        filter.page += 1
-        fetchCharacters()
-    }
 }
 
 private extension CharacterListViewModel {
-    func mapViewModels() {
-        charactersContents = characters.map { character in
-            CharacterListCellContent(character: character)
-        }
-    }
-    
-    func fetchFilteredCharacters(name: String) {
-        clearList()
-        filter.name = name
-        fetchCharacters()
+    func clearFilter() {
+        filter.name = nil
+        filter.page = 1
     }
     
     func clearList() {
         clearFilter()
         characters.removeAll()
-        shouldDisplaySearchError = false
+        shouldDisplayError = false
         viewController?.displayCharacters()
     }
     
-    func clearFilter() {
-        filter.name = nil
-        filter.status = nil
-        filter.species = nil
-        filter.type = nil
-        filter.gender = nil
-        filter.page = 1
-    }
-    
-    func fetchCharacters() {
+    func fetchCharacters(isLoadingMorePages: Bool = false) {
         service.getCharacters(filter: filter) { [weak self] result in
             guard let self = self else { return }
             
@@ -130,16 +121,25 @@ private extension CharacterListViewModel {
             switch result {
             case .success(let list):
                 guard !list.results.isEmpty else { fallthrough }
-                self.shouldDisplaySearchError = false
+                self.shouldDisplayError = false
                 self.hasNextPage = list.info.next != nil
                 self.characters.append(contentsOf: list.results)
             case .failure:
-                self.shouldDisplaySearchError = true
-                self.viewController?.displayError()
-               // print("Error: \(error.localizedDescription)")
+                if isLoadingMorePages {
+                    self.filter.page -= 1
+                } else {
+                    self.shouldDisplayError = !isLoadingMorePages
+                    // show error snack bar
+                }
             }
             
             self.viewController?.displayCharacters()
+        }
+    }
+    
+    func mapViewModels() {
+        charactersContents = characters.map { character in
+            CharacterListCellContent(character: character)
         }
     }
 }

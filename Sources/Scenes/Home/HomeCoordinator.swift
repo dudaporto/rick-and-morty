@@ -10,7 +10,7 @@ final class HomeCoordinator: HomeCoordinatorType {
     
     func coordinateToCharacterList() {
         let coordinator = CharacterListCoordinator()
-        let service = CharacterService()
+        let service = CharacterListService()
         let viewModel = CharacterListViewModel(coordinator: coordinator, service: service)
         let vc = CharacterListViewController(viewModel: viewModel)
         

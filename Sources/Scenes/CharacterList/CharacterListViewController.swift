@@ -1,8 +1,7 @@
 import UIKit
 
-protocol CharacterListViewControllerType: AnyObject {
+protocol CharacterListViewControllerType: CharacterNotFoundInfoCellDelegate {
     func displayCharacters()
-    func displayError()
     func startLoading()
     func stopLoading()
 }
@@ -11,7 +10,6 @@ extension CharacterListViewController.Constants {
     enum Insets {
         static var tableView = UIEdgeInsets(horizontal: Spacing.space3)
         static var header = UIEdgeInsets(vertical: Spacing.space2)
-        static var infoView = UIEdgeInsets(inset: Spacing.space3)
     }
 }
 
@@ -74,8 +72,8 @@ final class CharacterListViewController: UIViewController {
         return loading
     }()
     
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
         updateHeaderViewHeight(for: tableView.tableHeaderView)
     }
 
@@ -85,19 +83,11 @@ final class CharacterListViewController: UIViewController {
         header.frame.size.height = header.systemLayoutSizeFitting(CGSize(width: width, height: 0)).height
     }
     
-    private lazy var errorInfoView: InfoView = {
-        let infoView = InfoView()
-        infoView.setup(with: .genericError)
-        infoView.delegate = self
-        infoView.isHidden = true
-        return infoView
-    }()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         title = Localizable.title
         buildView()
-        viewModel.loadContent()
+        viewModel.loadContent(characterName: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -122,11 +112,10 @@ extension CharacterListViewController: ViewSetup {
     func setupConstraints() {
         tableView.fitToParent(with: Constants.Insets.tableView)
         loadingView.fitToParent()
-        errorInfoView.fitToParent(with: Constants.Insets.infoView)
     }
     
     func setupHierarchy() {
-        view.addSubviews(tableView, loadingView, errorInfoView)
+        view.addSubviews(tableView, loadingView)
         headerStackView.addArrangedSubviews(subtitleLabel, searchField)
     }
     
@@ -196,7 +185,9 @@ private extension CharacterListViewController {
     
     func infoViewCell() -> UITableViewCell {
         let cell = CharacterNotFoundInfoCell(style: .default, reuseIdentifier: CharacterNotFoundInfoCell.identifier)
-        cell.setup(characterName: viewModel.getRearchedName())
+        let errorContent = viewModel.getErrorContent()
+        cell.setup(title: errorContent.title, subtitle: errorContent.subtitle)
+        cell.delegate = self
         return cell
     }
     
@@ -213,14 +204,13 @@ private extension CharacterListViewController {
 }
 
 extension CharacterListViewController: CharacterListViewControllerType {
+    func didTapTryAgainButton() {
+        viewModel.loadContent(characterName: searchField.text)
+    }
+    
     func displayCharacters() {
         tableView.reloadData()
         tableView.isHidden = false
-        errorInfoView.isHidden = true
-    }
-    
-    func displayError() {
-        errorInfoView.isHidden = false
     }
     
     func startLoading() {
@@ -233,32 +223,22 @@ extension CharacterListViewController: CharacterListViewControllerType {
 }
 
 extension CharacterListViewController: UITextFieldDelegate {
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        view.endEditing(true)
-        return true
-    }
-    
-    func textFieldShouldClear(_ textField: UITextField) -> Bool {
-        textField.text = ""
-        viewModel.loadContent()
-        view.endEditing(true)
-        return false
-    }
-    
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         let fieldText = (textField.text ?? "") as NSString
         let newText = fieldText.replacingCharacters(in: range, with: string)
         viewModel.didChangeSearchName(name: newText)
         return true
     }
-}
-
-extension CharacterListViewController: InfoViewDelegate {
-    func didTapPrimaryButton() {
-        viewModel.loadContent()
+    
+    func textFieldShouldClear(_ textField: UITextField) -> Bool {
+        textField.text = ""
+        viewModel.loadContent(characterName: nil)
+        view.endEditing(true)
+        return false
     }
     
-    func didTapSecondaryButton() {
-        // to do
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        view.endEditing(true)
+        return true
     }
 }

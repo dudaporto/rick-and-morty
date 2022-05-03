@@ -1,8 +1,7 @@
 // MARK: - Global
-"global.genericError.title" = "Ops! Something went wrong";
+"global.genericError.title" = "Oops! Something went wrong";
 "global.genericError.message" = "Sorry, we had a system failure! Try again.";
 "global.genericError.tryAgain" = "Try again";
-"global.genericError.notNow" = "Not now";
 
 // MARK: - Character List
 
@@ -11,8 +10,8 @@
 "characterList.searchBarPlaceholder" = "What character are you looking for?";
 "characterList.characterCell.lastKnownLocation" = "Last known location";
 "characterList.seeMoreCharacters" = "See more characters";
-"characterList.notFound.title" = "Ops! Não encontramos resultados para ”%@”";
-"characterList.notFound.subtitle" = "Digite um novo nome e tente novamente";
+"characterList.notFound.searchErrorTitle" = "Oops! No results were found for ”%@”";
+"characterList.notFound.searchErrorSubtitle" = "Enter a new name or try again";
 
 // MARK: - Character Profile
 

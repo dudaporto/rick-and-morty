@@ -171,16 +171,9 @@ extension CharacterViewController: ViewSetup {
             gradientView.heightAnchor.constraint(equalToConstant: topBarHeight)
         ])
         
-        NSLayoutConstraint.activate([
-            statusIndicator.heightAnchor.constraint(equalToConstant: 12),
-            statusIndicator.widthAnchor.constraint(equalToConstant: 12)
-        ])
-        
-        NSLayoutConstraint.activate([
-            favoriteIcon.heightAnchor.constraint(equalToConstant: 30),
-            favoriteIcon.widthAnchor.constraint(equalToConstant: 30)
-        ])
-        
+        statusIndicator.size(12)
+        favoriteIcon.size(30)
+    
         NSLayoutConstraint.activate([
             infoTableView.topAnchor.constraint(equalTo: headerStackView.bottomAnchor, constant: Spacing.space2),
             infoTableView.leadingAnchor.constraint(equalTo: characterInfoContainer.leadingAnchor),
