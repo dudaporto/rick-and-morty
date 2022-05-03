@@ -1,10 +1,3 @@
-//
-//  UIEdgeInsets.swift
-//  RickAndMorty
-//
-//  Created by Maria Porto on 08/03/22.
-//
-
 import UIKit
 
 extension UIEdgeInsets {

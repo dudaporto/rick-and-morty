@@ -1,10 +1,3 @@
-//
-//  CharacterViewModel.swift
-//  RickAndMorty
-//
-//  Created by Maria Porto on 27/04/22.
-//
-
 import Foundation
 
 protocol CharacterViewModelType: AnyObject {

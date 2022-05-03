@@ -1,10 +1,3 @@
-//
-//  CharacterViewController.swift
-//  RickAndMorty
-//
-//  Created by Maria Porto on 25/04/22.
-//
-
 import UIKit
 
 protocol CharacterViewControllerType: ImageReceiver {

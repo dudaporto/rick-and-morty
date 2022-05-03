@@ -1,10 +1,3 @@
-//
-//  Radius.swift
-//  RickAndMorty
-//
-//  Created by Maria Porto on 25/03/22.
-//
-
 import UIKit
 
 enum Radius {
