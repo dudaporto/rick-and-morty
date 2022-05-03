@@ -3,11 +3,12 @@ import Foundation
 protocol CharacterListViewModelType: AnyObject {
     func characterContent(for index: Int) -> CharacterListCellContent?
     func didSelectCharacter(at index: Int)
-    func fetchCharacters()
-    func filterCharacters(name: String)
+    func loadContent()
+    func didChangeSearchName(name: String)
     func loadImage(for receiver: ImageReceiver, at index: Int)
     func numberOfItens(for section: Int) -> Int
     func getRearchedName() -> String
+    func loadMoreCharacters()
 }
 
 final class CharacterListViewModel {
@@ -15,10 +16,11 @@ final class CharacterListViewModel {
     private let service: CharacterServicing
     weak var viewController: CharacterListViewControllerType?
     
-    private var searchedName = ""
+    private var filter = CharacterFilter()
     private var shouldDisplaySearchError = false
+    private var hasNextPage = true
     private var charactersContents = [CharacterListCellContent]()
-    private var characterList: CharacterList? {
+    private var characters = [Character]() {
         didSet {
             mapViewModels()
         }
@@ -42,44 +44,26 @@ extension CharacterListViewModel: CharacterListViewModelType {
     }
     
     func didSelectCharacter(at index: Int) {
-        guard characterList?.results.indices.contains(index) ?? false,
-              let character = characterList?.results[index] else {
-            return
-        }
-        
+        let character = characters[index]
         coordinator.coordinateToCharacterProfile(with: character)
     }
     
-    func filterCharacters(name: String) {
+    func didChangeSearchName(name: String) {
         filterTimer?.invalidate()
         filterTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { [weak self] _ in
             self?.fetchFilteredCharacters(name: name)
         }
     }
     
-    func fetchCharacters() {
+    func loadContent() {
         clearList()
-        
         viewController?.startLoading()
-        service.getAllCharacters { [weak self] result in
-            guard let self = self else { return }
-            
-            self.viewController?.stopLoading()
-            switch result {
-            case .success(let list):
-                self.characterList = list
-                self.viewController?.displayCharacters()
-            case .failure(let error):
-                self.viewController?.displayError()
-                print("Error: \(error.localizedDescription)")
-            }
-        }
+        fetchCharacters()
     }
     
     func loadImage(for receiver: ImageReceiver, at index: Int) {
-        guard characterList?.results.indices.contains(index) ?? false,
-              let character = characterList?.results[index],
-              let url = URL(string: ApiPath.baseUrl + character.image.path) else {
+        let character = characters[index]
+        guard let url = URL(string: ApiPath.baseUrl + character.image.path) else {
             return
         }
         
@@ -92,30 +76,54 @@ extension CharacterListViewModel: CharacterListViewModelType {
             return charactersContents.count
         case .infoView:
             return shouldDisplaySearchError ? 1 : 0
+        case .seeMore:
+            return hasNextPage && charactersContents.count > 0 ? 1 : 0
         case .none:
             return 0
         }
     }
     
     func getRearchedName() -> String {
-        searchedName
+        filter.name ?? ""
+    }
+    
+    func loadMoreCharacters() {
+        filter.page += 1
+        fetchCharacters()
     }
 }
 
 private extension CharacterListViewModel {
     func mapViewModels() {
-        charactersContents = characterList?.results.map { character in
+        charactersContents = characters.map { character in
             CharacterListCellContent(character: character)
-        } ?? []
+        }
     }
     
     func fetchFilteredCharacters(name: String) {
         clearList()
-        print("Searching: \(name)")
-        
-        searchedName = name
-        viewController?.startLoading()
-        service.getFilteredCharacters(name: name, filter: nil) { [weak self] result in
+        filter.name = name
+        fetchCharacters()
+    }
+    
+    func clearList() {
+        clearFilter()
+        characters.removeAll()
+        shouldDisplaySearchError = false
+        viewController?.displayCharacters()
+    }
+    
+    func clearFilter() {
+        filter.name = nil
+        filter.status = nil
+        filter.species = nil
+        filter.type = nil
+        filter.gender = nil
+        filter.page = 1
+    }
+    
+    func fetchCharacters() {
+        service.getCharacters(filter: filter) { [weak self] result in
             guard let self = self else { return }
             
             self.viewController?.stopLoading()
@@ -123,21 +131,16 @@ private extension CharacterListViewModel {
             case .success(let list):
                 guard !list.results.isEmpty else { fallthrough }
                 self.shouldDisplaySearchError = false
-                self.characterList = list
+                self.hasNextPage = list.info.next != nil
+                self.characters.append(contentsOf: list.results)
             case .failure:
                 self.shouldDisplaySearchError = true
-                print("Error: ")
+                self.viewController?.displayError()
+               // print("Error: \(error.localizedDescription)")
             }
             
             self.viewController?.displayCharacters()
         }
-    }
-    
-    func clearList() {
-        characterList = nil
-        searchedName = ""
-        shouldDisplaySearchError = false
-        viewController?.displayCharacters()
     }
 }
 

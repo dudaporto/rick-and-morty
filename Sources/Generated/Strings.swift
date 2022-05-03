@@ -14,6 +14,8 @@ internal enum Strings {
   internal enum CharacterList {
     /// What character are you looking for?
     internal static let searchBarPlaceholder = Strings.tr("Localizable", "characterList.searchBarPlaceholder")
+    /// See more characters
+    internal static let seeMoreCharacters = Strings.tr("Localizable", "characterList.seeMoreCharacters")
     /// Search for Rick & Morty character by name and using filters
     internal static let subtitle = Strings.tr("Localizable", "characterList.subtitle")
     /// Characters

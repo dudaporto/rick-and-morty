@@ -28,6 +28,7 @@ final class CharacterListViewController: UIViewController {
     enum Section: Int, CaseIterable {
         case characters
         case infoView
+        case seeMore
     }
     
     private typealias Localizable = Strings.CharacterList
@@ -103,7 +104,7 @@ final class CharacterListViewController: UIViewController {
         super.viewDidLoad()
         title = Localizable.title
         buildView()
-        viewModel.fetchCharacters()
+        viewModel.loadContent()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -176,7 +177,10 @@ extension CharacterListViewController: UITableViewDataSource {
             return characterCell(for: indexPath)
             
         case .infoView:
-            return infoViewCell(for: indexPath)
+            return infoViewCell()
+            
+        case .seeMore:
+            return seeMoreCell()
             
         case .none:
             return UITableViewCell()
@@ -197,9 +201,20 @@ private extension CharacterListViewController {
         return cell
     }
     
-    func infoViewCell(for indexPath: IndexPath) -> UITableViewCell {
+    func infoViewCell() -> UITableViewCell {
         let cell = CharacterNotFoundInfoCell(style: .default, reuseIdentifier: CharacterNotFoundInfoCell.identifier)
         cell.setup(characterName: viewModel.getRearchedName())
+        return cell
+    }
+    
+    func seeMoreCell() -> UITableViewCell {
+        let cell = UITableViewCell()
+        let button = RMButton(style: .primary)
+        button.text = Localizable.seeMoreCharacters
+        button.action = { [weak self] in self?.viewModel.loadMoreCharacters() }
+        
+        cell.contentView.addSubview(button)
+        button.fitToParent(with: .init(horizontal: .zero, vertical: Spacing.space3))
         return cell
     }
 }
@@ -232,7 +247,7 @@ extension CharacterListViewController: UITextFieldDelegate {
     
     func textFieldShouldClear(_ textField: UITextField) -> Bool {
         textField.text = ""
-        viewModel.fetchCharacters()
+        viewModel.loadContent()
         view.endEditing(true)
         return false
     }
@@ -240,14 +255,14 @@ extension CharacterListViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         let fieldText = (textField.text ?? "") as NSString
         let newText = fieldText.replacingCharacters(in: range, with: string)
-        viewModel.filterCharacters(name: newText)
+        viewModel.didChangeSearchName(name: newText)
         return true
     }
 }
 
 extension CharacterListViewController: InfoViewDelegate {
     func didTapPrimaryButton() {
-        viewModel.fetchCharacters()
+        viewModel.loadContent()
     }
     
     func didTapSecondaryButton() {
