@@ -116,7 +116,6 @@ final class HomeViewController: UIViewController {
     }
     
     private func setupNavigationBar() {
-        
         navigationController?.navigationBar.backgroundColor = .clear
         navigationController?.navigationBar.isTranslucent = true
         navigationController?.navigationBar.shadowImage = UIImage()
