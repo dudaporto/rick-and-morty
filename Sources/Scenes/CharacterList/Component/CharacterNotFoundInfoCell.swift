@@ -35,7 +35,7 @@ final class CharacterNotFoundInfoCell: UITableViewCell {
     }()
     
     private lazy var tryAgainButton: RMButton = {
-        let button = RMButton(style: .primary)
+        let button = RMButton()
         button.text = GlobalLocalizable.GenericError.tryAgain
         button.action = { self.delegate?.didTapTryAgainButton() }
         return button

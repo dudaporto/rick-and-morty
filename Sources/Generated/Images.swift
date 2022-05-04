@@ -25,6 +25,7 @@ internal enum Images {
   internal static let iconOrigin = ImageAsset(name: "icon-origin")
   internal static let iconSpecie = ImageAsset(name: "icon-specie")
   internal static let jerryShrug = ImageAsset(name: "jerry-shrug")
+  internal static let homePoster = ImageAsset(name: "home-poster")
 }
 // swiftlint:enable identifier_name line_length nesting type_body_length type_name
 

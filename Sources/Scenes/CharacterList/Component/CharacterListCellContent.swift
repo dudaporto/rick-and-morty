@@ -1,6 +1,6 @@
 import UIKit
 
-final class CharacterListCellContent {
+struct CharacterListCellContent {
     private let character: Character
     
     init(character: Character) {
@@ -20,6 +20,6 @@ final class CharacterListCellContent {
     }
      
     var locationDescription: String {
-        character.location.name
+        character.location.name.capitalizingFirstLetter()
     }
 }

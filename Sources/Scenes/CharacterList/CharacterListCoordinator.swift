@@ -10,7 +10,8 @@ final class CharacterListCoordinator: CharacterListCoordinatorType {
     
     func coordinateToCharacterProfile(with info: Character) {
         let coordinator = CharacterCoordinator()
-        let viewModel = CharacterViewModel(coordinator: coordinator, character: info)
+        let service = CharacterService()
+        let viewModel = CharacterViewModel(coordinator: coordinator, service: service, character: info)
         let newScene = CharacterViewController(viewModel: viewModel)
         coordinator.viewController = newScene
         viewModel.viewController = newScene

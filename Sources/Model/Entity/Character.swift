@@ -9,6 +9,7 @@ struct Character: Decodable {
     let origin: Location
     let location: Location
     let image: URL
+    let episode: [URL]
 }
 
 @frozen

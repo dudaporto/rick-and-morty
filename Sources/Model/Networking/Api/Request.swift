@@ -48,7 +48,8 @@ final class Request<T: Decodable> {
         do {
             let decodedData = try decoder.decode(T.self, from: data)
             return decodedData
-        } catch {
+        } catch(let error) {
+            print(error)
             return nil
         }
     }

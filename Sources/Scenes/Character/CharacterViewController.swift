@@ -1,7 +1,8 @@
 import UIKit
 
 protocol CharacterViewControllerType: ImageReceiver {
-    func displayCharacterHeader(name: String, statusColor: UIColor, statusDescription: String) 
+    func displayCharacterHeader(name: String, statusColor: UIColor, statusDescription: String)
+    func displayEpisodes()
 }
 
 final class CharacterViewController: UIViewController {
@@ -170,9 +171,6 @@ extension CharacterViewController: ViewSetup {
             gradientView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             gradientView.heightAnchor.constraint(equalToConstant: topBarHeight)
         ])
-        
-        statusIndicator.size(12)
-        favoriteIcon.size(30)
     
         NSLayoutConstraint.activate([
             infoTableView.topAnchor.constraint(equalTo: headerStackView.bottomAnchor, constant: Spacing.space2),
@@ -180,6 +178,9 @@ extension CharacterViewController: ViewSetup {
             infoTableView.trailingAnchor.constraint(equalTo: characterInfoContainer.trailingAnchor),
             infoTableView.bottomAnchor.constraint(equalTo: characterInfoContainer.bottomAnchor)
         ])
+        
+        statusIndicator.size(12)
+        favoriteIcon.size(30)
     }
     
     func setupHierarchy() {
@@ -198,6 +199,10 @@ extension CharacterViewController: CharacterViewControllerType {
         characterTitle.text = name
         statusIndicator.backgroundColor = statusColor
         statusLabel.text = statusDescription
+    }
+    
+    func displayEpisodes() {
+        infoTableView.reloadData()
     }
 }
 
@@ -234,7 +239,7 @@ extension CharacterViewController: UITableViewDataSource {
             return infoCell(for: indexPath)
             
         case .episodes:
-            return UITableViewCell()
+            return episodeCell(for: indexPath)
             
         case .none:
             return UITableViewCell()
@@ -265,6 +270,16 @@ private extension CharacterViewController {
         }
         
         let cell = CharacterInfoCell(style: .default, reuseIdentifier: CharacterInfoCell.identifier)
+        cell.setup(content: content)
+        return cell
+    }
+    
+    func episodeCell(for indexPath: IndexPath) -> UITableViewCell {
+        guard let content = viewModel.episodeInfo(for: indexPath.row) else {
+            return UITableViewCell()
+        }
+        
+        let cell = CharacterEpisodeCell(style: .default, reuseIdentifier: CharacterEpisodeCell.identifier)
         cell.setup(content: content)
         return cell
     }

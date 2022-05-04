@@ -39,6 +39,7 @@ final class CharacterListViewController: UIViewController {
         search.placeholder = Localizable.searchBarPlaceholder
         search.delegate = self
         search.returnKeyType = .search
+        search.autocorrectionType = .no
         return search
     }()
 
@@ -60,6 +61,7 @@ final class CharacterListViewController: UIViewController {
         tableView.backgroundColor = .clear
         tableView.showsVerticalScrollIndicator = false
         tableView.isHidden = true
+        tableView.keyboardDismissMode = .onDrag
         tableView.tableHeaderView = headerStackView
         tableView.sectionHeaderHeight = .zero
         tableView.sectionFooterHeight = .zero
@@ -193,7 +195,7 @@ private extension CharacterListViewController {
     
     func seeMoreCell() -> UITableViewCell {
         let cell = UITableViewCell()
-        let button = RMButton(style: .primary)
+        let button = RMButton()
         button.text = Localizable.seeMoreCharacters
         button.action = { [weak self] in self?.viewModel.loadMoreCharacters() }
         

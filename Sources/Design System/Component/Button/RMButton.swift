@@ -1,16 +1,11 @@
 import UIKit
 
-enum ButtonStyle {
-    case primary
-    case secondary
-}
-
 final class RMButton: UIButton {
     private let defaultHeight: CGFloat = 45
     
     override var isHighlighted: Bool {
         didSet {
-            backgroundColor = isHighlighted ? Palette.green1.color.withAlphaComponent(0.1) : Palette.background.color
+            backgroundColor = isHighlighted ? Palette.green1.color.withAlphaComponent(0.1) : .clear
         }
     }
     
@@ -29,41 +24,25 @@ final class RMButton: UIButton {
         }
     }
     
-    private func setStyle(_ style: ButtonStyle) {
-        setCommonStyle()
-        
-        switch style {
-        case .primary:
-            setPrimaryStyle()
-        case .secondary:
-            setSecondaryStyle()
-        }
-    }
-    
-    private func setPrimaryStyle() {
+    private func setStyle() {
         border(color: Palette.green1.color, width: 1, opacity: 1, radius: Radius.medium)
-        backgroundColor = Palette.background.color
         setTitleColor(Palette.green1.color, for: [])
-    }
-    
-    private func setSecondaryStyle() {
-        border(radius: Radius.medium)
-        backgroundColor = Palette.background.color
-        setTitleColor(Palette.gray3.color, for: [])
-    }
-    
-    private func setCommonStyle() {
         titleLabel?.font = Typography.highlightTertiaryTitle
     }
     
-    init(style: ButtonStyle) {
+    init() {
         super.init(frame: .zero)
-        setStyle(style)
+        setStyle()
         height(defaultHeight)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        setStyle()
     }
     
     @objc func didTap() {
