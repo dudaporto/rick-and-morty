@@ -21,6 +21,9 @@ enum Typography {
     /// Regular 18
     static let title = UIFont(name: FontName.regular, size: 18)
     
+    /// Regular 16
+    static let subtitle = UIFont(name: FontName.regular, size: 16)
+    
     /// Regular 14
     static let info = UIFont(name: FontName.regular, size: 14)
 }

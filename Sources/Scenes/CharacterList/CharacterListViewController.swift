@@ -94,7 +94,7 @@ final class CharacterListViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setupStyles()
+        setupNavigationBar()
     }
     
     private let viewModel: CharacterListViewModelType
@@ -123,8 +123,6 @@ extension CharacterListViewController: ViewSetup {
     
     func setupStyles() {
         view.backgroundColor = Palette.background.color
-        navigationController?.navigationBar.barStyle = .default
-        navigationController?.navigationBar.tintColor = Palette.green1.color
     }
 }
 
@@ -202,6 +200,15 @@ private extension CharacterListViewController {
         cell.contentView.addSubview(button)
         button.fitToParent(with: .init(horizontal: .zero, vertical: Spacing.space3))
         return cell
+    }
+    
+    func setupNavigationBar() {
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationController?.navigationBar.barStyle = .default
+        navigationController?.navigationBar.tintColor = Palette.green1.color
+        navigationController?.navigationBar.shadowImage = nil
+        navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
+        navigationItem.largeTitleDisplayMode = .always
     }
 }
 

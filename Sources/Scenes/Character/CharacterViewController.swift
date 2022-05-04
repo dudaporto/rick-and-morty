@@ -104,7 +104,9 @@ final class CharacterViewController: UIViewController {
     }()
     
     private var topBarHeight: CGFloat {
-        navigationController?.navigationBar.frame.height ?? 0 + view.safeAreaInsets.top
+        let navBarHeight = navigationController?.navigationBar.frame.height ?? 0
+        let safeAreaTop = UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0
+        return navBarHeight + safeAreaTop
     }
     
     private let viewModel: CharacterViewModelType
@@ -124,6 +126,11 @@ final class CharacterViewController: UIViewController {
         buildView()
         viewModel.fetchCharacterInfo()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setupNavigationBar()
+    }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -140,6 +147,16 @@ final class CharacterViewController: UIViewController {
         
         gradientView.layer.sublayers?.removeAll()
         gradientView.layer.insertSublayer(gradient, at: 0)
+    }
+    
+    private func setupNavigationBar() {
+        navigationController?.navigationBar.prefersLargeTitles = false
+        navigationController?.navigationBar.tintColor = .white
+        navigationController?.navigationBar.barStyle = .black
+        navigationController?.navigationBar.backgroundColor = .clear
+        navigationController?.navigationBar.isTranslucent = true
+        navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
     }
 }
 
@@ -189,8 +206,7 @@ extension CharacterViewController: ViewSetup {
     }
     
     func setupStyles() {
-        navigationController?.navigationBar.tintColor = .white
-        navigationController?.navigationBar.barStyle = .black
+        setupNavigationBar()
     }
 }
 
