@@ -25,6 +25,7 @@ internal enum Images {
   internal static let iconLocation = ImageAsset(name: "icon-location")
   internal static let iconOrigin = ImageAsset(name: "icon-origin")
   internal static let iconSpecie = ImageAsset(name: "icon-specie")
+  internal static let characterPlaceholder = ImageAsset(name: "character-placeholder")
   internal static let homePoster = ImageAsset(name: "home-poster")
   internal static let jerryShrug = ImageAsset(name: "jerry-shrug")
 }

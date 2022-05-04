@@ -26,6 +26,7 @@ final class CharacterListCell: UITableViewCell {
     private lazy var characterImage: UIImageView = {
         let image = UIImageView()
         image.border(radius: Radius.medium)
+        image.image = Images.characterPlaceholder.image
         image.layer.masksToBounds = true
         image.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
         return image
@@ -132,7 +133,7 @@ final class CharacterListCell: UITableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        characterImage.image = nil
+        characterImage.image = Images.characterPlaceholder.image
         currentDownloadTask?.cancel()
     }
 }

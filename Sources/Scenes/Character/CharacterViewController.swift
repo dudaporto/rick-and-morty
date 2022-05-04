@@ -24,6 +24,7 @@ final class CharacterViewController: UIViewController {
     
     private lazy var characterImage: UIImageView = {
         let image = UIImageView()
+        image.image = Images.characterPlaceholder.image
         image.translatesAutoresizingMaskIntoConstraints = false
         return image
     }()
