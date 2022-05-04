@@ -21,14 +21,3 @@ targets:
     sources: Tests
     dependencies: 
       - target: RickAndMorty
-
-schemes:
-  RickAndMorty:
-    build: 
-      targets: 
-        RickAndMorty: all
-    test: 
-      targets: 
-        - name: RickAndMortyTests
-          parallelizable: false
-          randomExecutionOrder: true
