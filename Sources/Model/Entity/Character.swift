@@ -1,6 +1,6 @@
 import UIKit
 
-struct Character: Decodable {
+struct Character: Decodable, Equatable {
     let id: Int
     let name: String
     let status: CharacterStatus
@@ -13,7 +13,7 @@ struct Character: Decodable {
 }
 
 @frozen
-enum CharacterStatus: String, Decodable {
+enum CharacterStatus: String, Decodable, Equatable {
     case Alive
     case Dead
     case unknown
@@ -24,7 +24,7 @@ enum CharacterStatus: String, Decodable {
 }
 
 @frozen
-enum CharacterGender: String, Decodable {
+enum CharacterGender: String, Decodable, Equatable {
     case Female
     case Male
     case Genderless

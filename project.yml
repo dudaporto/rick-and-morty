@@ -21,3 +21,15 @@ targets:
     sources: Tests
     dependencies: 
       - target: RickAndMorty
+    gatherCoverageData: true
+
+schemes:
+  RickAndMorty:
+    build: 
+      targets: 
+        RickAndMorty: all
+    test: 
+      targets: 
+        - name: RickAndMortyTests
+          parallelizable: false
+          randomExecutionOrder: true 

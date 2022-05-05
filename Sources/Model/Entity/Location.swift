@@ -1,3 +1,3 @@
-struct Location: Decodable {
+struct Location: Decodable, Equatable {
     let name: String
 }

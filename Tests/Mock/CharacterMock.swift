@@ -14,4 +14,17 @@ extension Character {
                                     URL(string: "https://rickandmortyapi.com/api/episode/1")!,
                                     URL(string: "https://rickandmortyapi.com/api/episode/2")!
                                 ])
+    
+    static let mock2 = Character(id: 2,
+                                name: "Morty",
+                                status: .Alive,
+                                species: "Human",
+                                gender: .Male,
+                                origin: Location(name: "Earth"),
+                                location: Location(name: "Earth"),
+                                image: URL(string: "https://rickandmortyapi.com/api/character/avatar/2.jpeg")!,
+                                episode: [
+                                    URL(string: "https://rickandmortyapi.com/api/episode/1")!,
+                                    URL(string: "https://rickandmortyapi.com/api/episode/2")!
+                                ])
 }
