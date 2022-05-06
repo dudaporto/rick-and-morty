@@ -18,7 +18,7 @@ final class CharacterListViewModel {
     private let service: CharacterListServicing
     weak var viewController: CharacterListViewControllerType?
     
-    private var filter = CharacterFilter()
+    private(set) var filter = CharacterFilter()
     private var filterTimer: Timer?
     private var hasNextPage = true
     private var shouldDisplayError = false
@@ -127,9 +127,9 @@ private extension CharacterListViewModel {
             case .failure:
                 if isLoadingMorePages {
                     self.filter.page -= 1
-                } else {
-                    self.shouldDisplayError = !isLoadingMorePages
                     // show error snack bar
+                } else {
+                    self.shouldDisplayError = true
                 }
             }
             

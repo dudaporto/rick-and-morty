@@ -17,12 +17,12 @@ private final class  CharacterListCoordinatorSpy: CharacterListCoordinatorType {
 
 // MARK: - CharacterListServiceMock
 private final class CharacterListServiceMock: CharacterListServicing {
-    private(set) var callGetCharactersCount = 0
+    private(set) var calledCharacterFilter: CharacterFilter?
     var charactersExpectedResult: Result<CharacterList, ApiError>?
     
+    
     func getCharacters(filter: CharacterFilter, completion: @escaping NetworkResponse<CharacterList>) {
-        callGetCharactersCount += 1
-        
+        calledCharacterFilter = filter
         guard let expectedResult = charactersExpectedResult else { return }
         completion(expectedResult)
     }
@@ -46,10 +46,6 @@ private final class CharacterListViewControllerSpy: CharacterListViewControllerT
     func stopLoading() {
         callStopLoadingCount += 1
     }
-    
-    func didTapTryAgainButton() {
-        callDidTapTryAgainButtonCount += 1
-    }
 }
 
 // MARK: - CharacterListViewModelTests
@@ -64,17 +60,6 @@ final class CharacterListViewModelTests: XCTestCase {
         viewModel.viewController = viewControllerSpy
         return viewModel
     }()
-    
-//    protocol CharacterListViewModelType: AnyObject {
-//        func characterContent(for index: Int) -> CharacterListCellContent?
-//        func didChangeSearchName(name: String)
-//        func didSelectCharacter(at index: Int)
-//        func getErrorContent() -> (title: String, subtitle: String)
-//        func loadContent(characterName: String?)
-//        func loadImage(for receiver: ImageReceiver, at index: Int)
-//        func loadMoreCharacters()
-//        func numberOfItens(for section: Int) -> Int
-//    }
     
     // MARK: characterContent
     
@@ -91,11 +76,24 @@ final class CharacterListViewModelTests: XCTestCase {
         XCTAssertEqual(characterContent, expectedResult)
     }
     
-    func testCharacterContent_WhenDontHaveCharacter_ShouldReturnNil() {
+    func testCharacterContent_WhenDoesntHaveCharacter_ShouldReturnNil() {
         let index = 1
         let characterContent = sut.characterContent(for: index)
         
         XCTAssertEqual(characterContent, nil)
+    }
+    
+    // MARK: didChangeSearchName
+    
+    func testDidChangeSearchName_WhenCalledFromViewController_ShouldFetchFilteredCharacters() {
+        serviceMock.charactersExpectedResult = .success(.mock(hasNextPage: true))
+        sut.didChangeSearchName(name: "Rick")
+        
+        let _ = XCTWaiter.wait(for: [expectation(description: "Wait typing delay")], timeout: 0.5)
+        XCTAssertEqual(viewControllerSpy.callStartLoadingCount, 1)
+        XCTAssertEqual(viewControllerSpy.callStopLoadingCount, 1)
+        XCTAssertEqual(viewControllerSpy.callDisplayCharactersCount, 2)
+        XCTAssertEqual(serviceMock.calledCharacterFilter?.name, "Rick")
     }
     
     // MARK: didSelectCharacter
@@ -115,7 +113,7 @@ final class CharacterListViewModelTests: XCTestCase {
     
     // MARK: getErrorContent
     
-    func testGetErrorContent_WhenIsSearchError_ShouldReturnSearchErrorContent() {
+    func testGetErrorContent_WhenItsSearchError_ShouldReturnSearchErrorContent() {
         let searchedName = "Rick"
         
         serviceMock.charactersExpectedResult = .failure(.serverError)
@@ -126,12 +124,104 @@ final class CharacterListViewModelTests: XCTestCase {
         XCTAssertEqual(errorContent.subtitle, Localizable.NotFound.searchErrorSubtitle)
     }
     
-    func testGetErrorContent_WhenIsGenericError_ShouldReturnSearchErrorContent() {
+    func testGetErrorContent_WhenItsGenericError_ShouldReturnSearchErrorContent() {
         serviceMock.charactersExpectedResult = .failure(.serverError)
         sut.loadContent(characterName: nil)
         let errorContent = sut.getErrorContent()
         
         XCTAssertEqual(errorContent.title, GlobalLocalizable.GenericError.title)
         XCTAssertEqual(errorContent.subtitle, GlobalLocalizable.GenericError.message)
+    }
+    
+    // MARK: loadContent
+    
+    func testLoadContent_WhenDoesntHaveName_ShouldClearListAndDisplayCharacters() {
+        serviceMock.charactersExpectedResult = .success(.mock(hasNextPage: true))
+        sut.loadContent(characterName: nil)
+        
+        XCTAssertEqual(viewControllerSpy.callStartLoadingCount, 1)
+        XCTAssertEqual(viewControllerSpy.callStopLoadingCount, 1)
+        XCTAssertEqual(viewControllerSpy.callDisplayCharactersCount, 2)
+        XCTAssertEqual(serviceMock.calledCharacterFilter?.name, nil)
+    }
+    
+    func testLoadContent_WhenHasName_ShouldClearListAndDisplayFilteredCharacters() {
+        serviceMock.charactersExpectedResult = .success(.mock(hasNextPage: true))
+        sut.loadContent(characterName: "Rick")
+        
+        XCTAssertEqual(viewControllerSpy.callStartLoadingCount, 1)
+        XCTAssertEqual(viewControllerSpy.callStopLoadingCount, 1)
+        XCTAssertEqual(viewControllerSpy.callDisplayCharactersCount, 2)
+        XCTAssertEqual(serviceMock.calledCharacterFilter?.name, "Rick")
+    }
+    
+    // MARK: loadMoreCharacters
+    
+    func testLoadMoreCharacters_WhenReturnSuccess_ShouldDisplayCharactersAndIncreasePage() {
+        serviceMock.charactersExpectedResult = .success(.mock(hasNextPage: true))
+        sut.loadMoreCharacters()
+        
+        XCTAssertEqual(viewControllerSpy.callStartLoadingCount, 0)
+        XCTAssertEqual(viewControllerSpy.callDisplayCharactersCount, 1)
+        XCTAssertEqual(serviceMock.calledCharacterFilter?.page, sut.filter.page)
+    }
+    
+    func testLoadMoreCharacters_WhenReturnFailure_ShouldDisplayCharactersAndDicreasePage() {
+        serviceMock.charactersExpectedResult = .failure(.serverError)
+        sut.loadMoreCharacters()
+        
+        XCTAssertEqual(viewControllerSpy.callStartLoadingCount, 0)
+        XCTAssertEqual(viewControllerSpy.callDisplayCharactersCount, 1)
+        XCTAssertEqual(sut.filter.page, (serviceMock.calledCharacterFilter?.page ?? 0) - 1)
+    }
+    
+    // MARK: numberOfItens
+    
+    func testNumberOfItens_WhenItsCharacterSection_ShouldReturnCharactersCount() {
+        let charactersList = CharacterList.mock(hasNextPage: true)
+        
+        serviceMock.charactersExpectedResult = .success(charactersList)
+        sut.loadContent(characterName: nil)
+        let numberOfItens = sut.numberOfItens(for: 0)
+        
+        XCTAssertEqual(numberOfItens, charactersList.results.count)
+    }
+    
+    func testNumberOfItens_WhenItsInfoViewSectionAndShouldDisplayError_ShouldReturnOne() {
+        serviceMock.charactersExpectedResult = .failure(.serverError)
+        sut.loadContent(characterName: nil)
+        let numberOfItens = sut.numberOfItens(for: 1)
+        
+        XCTAssertEqual(numberOfItens, 1)
+    }
+    
+    func testNumberOfItens_WhenItsInfoViewSectionAndShouldntDisplayError_ShouldReturnZero() {
+        serviceMock.charactersExpectedResult = .success(.mock(hasNextPage: true))
+        sut.loadContent(characterName: nil)
+        let numberOfItens = sut.numberOfItens(for: 1)
+        
+        XCTAssertEqual(numberOfItens, 0)
+    }
+    
+    func testNumberOfItens_WhenItsSeeMoreSectionAndHasNextPage_ShouldReturnoOne() {
+        serviceMock.charactersExpectedResult = .success(.mock(hasNextPage: true))
+        sut.loadContent(characterName: nil)
+        let numberOfItens = sut.numberOfItens(for: 2)
+        
+        XCTAssertEqual(numberOfItens, 1)
+    }
+    
+    func testNumberOfItens_WhenItsSeeMoreSectionAndDoesntaHaveNextPage_ShouldReturnoZero() {
+        serviceMock.charactersExpectedResult = .success(.mock(hasNextPage: false))
+        sut.loadContent(characterName: nil)
+        let numberOfItens = sut.numberOfItens(for: 2)
+        
+        XCTAssertEqual(numberOfItens, 0)
+    }
+    
+    func testNumberOfItens_WhenItsInvalidSection_ShouldReturnoZero() {
+        let numberOfItens = sut.numberOfItens(for: 3)
+        
+        XCTAssertEqual(numberOfItens, 0)
     }
 }

@@ -21,7 +21,6 @@ targets:
     sources: Tests
     dependencies: 
       - target: RickAndMorty
-    gatherCoverageData: true
 
 schemes:
   RickAndMorty:
@@ -33,3 +32,4 @@ schemes:
         - name: RickAndMortyTests
           parallelizable: false
           randomExecutionOrder: true 
+      gatherCoverageData: true

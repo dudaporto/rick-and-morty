@@ -1,6 +1,6 @@
 import UIKit
 
-protocol CharacterListViewControllerType: CharacterNotFoundInfoCellDelegate {
+protocol CharacterListViewControllerType: AnyObject {
     func displayCharacters()
     func startLoading()
     func stopLoading()
@@ -170,6 +170,7 @@ extension CharacterListViewController: UITableViewDataSource {
     }
 }
 
+// MARK: - Private functions
 private extension CharacterListViewController {
     func characterCell(for indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: CharacterListCell.identifier, for: indexPath)
@@ -212,11 +213,8 @@ private extension CharacterListViewController {
     }
 }
 
+// MARK: - CharacterListViewControllerType
 extension CharacterListViewController: CharacterListViewControllerType {
-    func didTapTryAgainButton() {
-        viewModel.loadContent(characterName: searchField.text)
-    }
-    
     func displayCharacters() {
         tableView.reloadData()
         tableView.isHidden = false
@@ -231,6 +229,7 @@ extension CharacterListViewController: CharacterListViewControllerType {
     }
 }
 
+// MARK: - UITextFieldDelegate
 extension CharacterListViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         let fieldText = (textField.text ?? "") as NSString
@@ -250,4 +249,12 @@ extension CharacterListViewController: UITextFieldDelegate {
         view.endEditing(true)
         return true
     }
+}
+
+// MARK: - CharacterNotFoundInfoCellDelegate
+extension CharacterListViewController: CharacterNotFoundInfoCellDelegate {
+    func didTapTryAgainButton() {
+        viewModel.loadContent(characterName: searchField.text)
+    }
+    
 }
