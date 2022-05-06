@@ -78,12 +78,6 @@ final class CharacterListViewController: UIViewController {
         super.viewDidLayoutSubviews()
         updateHeaderViewHeight(for: tableView.tableHeaderView)
     }
-
-    func updateHeaderViewHeight(for header: UIView?) {
-        guard let header = header else { return }
-        let width = view.bounds.width - Spacing.space5
-        header.frame.size.height = header.systemLayoutSizeFitting(CGSize(width: width, height: 0)).height
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -210,6 +204,12 @@ private extension CharacterListViewController {
         navigationController?.navigationBar.shadowImage = nil
         navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
         navigationItem.largeTitleDisplayMode = .always
+    }
+    
+    func updateHeaderViewHeight(for header: UIView?) {
+        guard let header = header else { return }
+        let width = view.bounds.width - Spacing.space5
+        header.frame.size.height = header.systemLayoutSizeFitting(CGSize(width: width, height: 0)).height
     }
 }
 
