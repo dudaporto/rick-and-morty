@@ -1,23 +1,27 @@
 <p align="center">
-<img width=300 src=https://user-images.githubusercontent.com/56546505/167316108-73d100e7-ed1d-4f11-b8f1-063f291241fc.png>
+  <img width=300 src=https://user-images.githubusercontent.com/56546505/167316108-73d100e7-ed1d-4f11-b8f1-063f291241fc.png>
 </p>
 
-Este é um aplicativo para iOS, baseado na série de televisão Rick & Morty. Nele você consegue acessar informações sobre personagens, episódios e localidades que aparecem no programa. Todas informações usadas no app foram preenchidas com o auxílio da [Rick And Morty API](https://rickandmortyapi.com/).
+<p align="center">
+  Este é um aplicativo para iOS, baseado na série de televisão Rick & Morty. Nele você consegue acessar informações sobre personagens, episódios e localidades que aparecem no programa. Todas informações usadas no app foram preenchidas com o auxílio da 
+<a target="_blank" href=https://rickandmortyapi.com/>Rick And Morty API</a>.
+</p>
+ 
+<p align="center">
+  <span>
+    <img src=https://img.shields.io/badge/iOS-14.0-blue>
+    <img src=https://img.shields.io/badge/Swift-5.0-orange>
+  </span>
+</p>
 
-<span>
-<img src=https://img.shields.io/badge/iOS-14.0-blue>
-<img src=https://img.shields.io/badge/Swift-5.0-orange>
-</span>
-  
 
 ## Índice 
 
-* [Como rodar]()
-* [Funcionalidades principais]()
-* [Aspectos técnicos]()
-* [Tecnologias utilizadas]()
-* [Vídeo demonstrativo]()
-* [Problemas a serem resolvidos]()
+* [Como rodar](#como-rodar)
+* [Funcionalidades principais](#funcionalidades-principais)
+* [Aspectos técnicos](#aspectos-técnicos)
+* [Problemas a serem resolvidos](#Problemas-a-serem-resolvidos)
+* [Vídeo demonstrativo](#vídeo-demonstrativo)
 * [Próximas features]()
 
 
@@ -65,9 +69,47 @@ _Clique para expandir!_
 
 
 ## Aspectos técnicos
+O projeto desevolvido possui:
 - [XcodeGen](https://github.com/yonaskolb/XcodeGen) para configurar o projeto
 - [SwiftGen](https://github.com/SwiftGen/SwiftGen) para gerar cores, imagens e textos
 - Cache de imagens para otimizar o download
 - Carregamento paginado na `UITableView`
 - Técnica de [debounce](https://www.treinaweb.com.br/blog/o-que-e-debounce-e-qual-sua-importancia-para-a-performance) para as requisições de pesquisa
+- Arquitetura MVVM-C
+- Testes unitários
+
+## Problemas a serem resolvidos 🛠
+
+_Clique para expandir!_
+
+ <details>
+  <summary>Carregamento de personagem que possui apenas 1 episódio</summary>
+  Quando entramos na página do personagem, é feita um request para buscar informações dos episódios (pelo id) que ele aparece. Porém, quando o personagem possui apenas um EP, o modelo o json é de apenas um objeto, e não uma lista como nos outros casos. Dessa forma, ocorre um erro de decoding e essa seção não é exibida.</br>Exemplo:
+  
+<ul>
+  <li> <a target="_blank" href=https://rickandmortyapi.com/api/episode/10,28>Request de vários episódios</a></li>
+  <li><a target="_blank" href=https://rickandmortyapi.com/api/episode/10>Request de 1 episódio</a></li>
+</ul>
+ </details>
+
+ <details>
+  <summary>Bug do tema da navigation bar</summary>
+  Ao entrarmos na tela do personagem, trocar de tema e voltar para a tela anterior, as cores da navigation bar da listagem ficam diferentes do que deveriam ser.
+<p>
+   <img width=300 src=https://user-images.githubusercontent.com/56546505/167320834-34f74f07-138f-47e7-baad-1360b0e9d647.png>
+  </p>
+  
+ </details>
+
+## Vídeo demosntrativo
+
+https://user-images.githubusercontent.com/56546505/167320080-47d3eded-4527-49bf-b28d-65a1297d97e9.mp4
+
+[Figma project 🔗](https://www.figma.com/file/Pg7J1Qt96e3QCWZEQublMF/RickAndMorty?node-id=0%3A1)
+
+## Próximas features ⏱
+- Favoritar personagens
+- Filtro de personagens por espécie, gênero e status
+- Lista de localidades e episódios
+- ... e mais!
 
