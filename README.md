@@ -22,7 +22,7 @@
 * [Aspectos técnicos](#aspectos-técnicos)
 * [Problemas a serem resolvidos](#Problemas-a-serem-resolvidos-)
 * [Vídeo demonstrativo](#vídeo-demonstrativo)
-* [Próximas features](#próximas-features)
+* [Próximas features](#próximas-features-)
 
 
 ## Como rodar
