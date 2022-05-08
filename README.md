@@ -101,7 +101,7 @@ _Clique para expandir!_
   
  </details>
 
-## Vídeo demosntrativo
+## Vídeo demonstrativo
 
 https://user-images.githubusercontent.com/56546505/167320080-47d3eded-4527-49bf-b28d-65a1297d97e9.mp4
 
