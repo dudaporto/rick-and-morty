@@ -96,7 +96,7 @@ _Clique para expandir!_
   <summary>Bug do tema da navigation bar</summary>
   Ao entrarmos na tela do personagem, trocar de tema e voltar para a tela anterior, as cores da navigation bar da listagem ficam diferentes do que deveriam ser.
 <p>
-   <img width=300 src=https://user-images.githubusercontent.com/56546505/167320834-34f74f07-138f-47e7-baad-1360b0e9d647.png>
+   <img width=300 src=https://user-images.githubusercontent.com/56546505/167321064-4c3056b1-0c87-405e-bf52-f0ad96bad6cc.gif>
   </p>
   
  </details>
