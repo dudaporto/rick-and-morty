@@ -20,9 +20,9 @@
 * [Como rodar](#como-rodar)
 * [Funcionalidades principais](#funcionalidades-principais)
 * [Aspectos técnicos](#aspectos-técnicos)
-* [Problemas a serem resolvidos](#Problemas-a-serem-resolvidos)
+* [Problemas a serem resolvidos](#Problemas-a-serem-resolvidos-)
 * [Vídeo demonstrativo](#vídeo-demonstrativo)
-* [Próximas features]()
+* [Próximas features](#próximas-features)
 
 
 ## Como rodar
