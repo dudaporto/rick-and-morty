@@ -127,7 +127,7 @@ private extension CharacterListViewModel {
             case .failure:
                 if isLoadingMorePages {
                     self.filter.page -= 1
-                    // show error snack bar
+                    // TODO: show error snack bar
                 } else {
                     self.shouldDisplayError = true
                 }

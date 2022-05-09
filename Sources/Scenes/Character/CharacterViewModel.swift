@@ -7,7 +7,7 @@ protocol CharacterViewModelType: AnyObject {
     func numberOfItens(for section: Int) -> Int
 }
 
-private enum InfoSection: String, CaseIterable {
+enum InfoSection: String, CaseIterable {
     case specie
     case origin
     case location
@@ -78,12 +78,12 @@ extension CharacterViewModel: CharacterViewModelType {
         viewController?.displayCharacterHeader(name: character.name,
                                                statusColor: character.status.color,
                                                statusDescription: character.status.descritpion)
+        fetchEpisodes()
         
         guard let viewController = viewController,
               let url = URL(string: ApiPath.baseUrl + character.image.path) else { return }
         
         ImageService.shared.load(for: viewController, imageUrl: url)
-        fetchEpisodes()
     }
     
     func numberOfItens(for section: Int) -> Int {
