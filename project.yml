@@ -13,7 +13,6 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.rickandmorty
-        DEVELOPMENT_TEAM: MM84828K6C
     preBuildScripts:
       - path: SwiftGen.sh
         name: SwiftGen
