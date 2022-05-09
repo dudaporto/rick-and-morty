@@ -58,7 +58,7 @@ extension CharacterListViewModel: CharacterListViewModelType {
     }
     
     func getErrorContent() -> (title: String, subtitle: String) {
-        guard let searchedName = filter.name else {
+        guard let searchedName = filter.name, !searchedName.isEmpty else {
             return (GlobalLocalizable.GenericError.title, GlobalLocalizable.GenericError.message)
         }
         

@@ -1,23 +1,24 @@
 name: RickAndMorty
 options: 
   deploymentTarget: 
-    iOS: 14.5
+    iOS: 14.0
 
 targets: 
   RickAndMorty:
     type: application
     platform: iOS
     deploymentTarget: 
-      iOS: 14.5
+      iOS: 14.0
     sources: Sources
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.rickandmorty
+        DEVELOPMENT_TEAM: MM84828K6C
   RickAndMortyTests:
     type: bundle.unit-test
     platform: iOS
     deploymentTarget: 
-      iOS: 14.5
+      iOS: 14.0
     sources: Tests
     dependencies: 
       - target: RickAndMorty

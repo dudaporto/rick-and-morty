@@ -2,6 +2,13 @@ import UIKit
 
 final class RMButton: UIButton {
     private let defaultHeight: CGFloat = 45
+    private let isLoadable: Bool
+    
+    private lazy var loadingView: UIActivityIndicatorView = {
+        let loading = UIActivityIndicatorView(style: .medium)
+        loading.color = Palette.green1.color
+        return loading
+    }()
     
     override var isHighlighted: Bool {
         didSet {
@@ -16,24 +23,17 @@ final class RMButton: UIButton {
     }
     
     var text: String? {
-        set {
-            setTitle(newValue, for: [])
-        }
-        get {
-            title(for: [])
+        didSet {
+            setTitle(text, for: [])
         }
     }
-    
-    private func setStyle() {
-        border(color: Palette.green1.color, width: 1, opacity: 1, radius: Radius.medium)
-        setTitleColor(Palette.green1.color, for: [])
-        titleLabel?.font = Typography.highlightTertiaryTitle
-    }
-    
-    init() {
+
+    init(isLoadable: Bool = false) {
+        self.isLoadable = isLoadable
         super.init(frame: .zero)
         setStyle()
         height(defaultHeight)
+        addLoadingViewIfNeeded()
     }
     
     required init?(coder: NSCoder) {
@@ -44,8 +44,30 @@ final class RMButton: UIButton {
         super.traitCollectionDidChange(previousTraitCollection)
         setStyle()
     }
+}
+
+private extension RMButton {
+    func addLoadingViewIfNeeded() {
+        guard isLoadable else { return }
+        
+        addSubview(loadingView)
+        loadingView.fitToParent()
+    }
+    
+    func startLoading() {
+        guard isLoadable else { return }
+        text = ""
+        loadingView.startAnimating()
+    }
+
+    func setStyle() {
+        border(color: Palette.green1.color, width: 1, opacity: 1, radius: Radius.medium)
+        setTitleColor(Palette.green1.color, for: [])
+        titleLabel?.font = Typography.highlightTertiaryTitle
+    }
     
     @objc func didTap() {
+        startLoading()
         action?()
     }
 }

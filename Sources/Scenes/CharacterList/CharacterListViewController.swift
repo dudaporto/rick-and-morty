@@ -188,10 +188,11 @@ private extension CharacterListViewController {
     
     func seeMoreCell() -> UITableViewCell {
         let cell = UITableViewCell()
-        let button = RMButton()
+        let button = RMButton(isLoadable: true)
         button.text = Localizable.seeMoreCharacters
         button.action = { [weak self] in self?.viewModel.loadMoreCharacters() }
         
+        cell.backgroundColor = .clear
         cell.contentView.addSubview(button)
         button.fitToParent(with: .init(horizontal: .zero, vertical: Spacing.space3))
         return cell

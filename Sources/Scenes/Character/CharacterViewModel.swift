@@ -28,8 +28,7 @@ private enum InfoSection: String, CaseIterable {
     }
 }
 
-final class CharacterViewModel {
-    private let coordinator: CharacterCoordinatorType
+final class CharacterViewModel {\
     private let service: CharacterServicing
     private let character: Character
     
@@ -37,8 +36,7 @@ final class CharacterViewModel {
    
     weak var viewController: CharacterViewControllerType?
     
-    init(coordinator: CharacterCoordinatorType, service: CharacterServicing, character: Character) {
-        self.coordinator = coordinator
+    init(service: CharacterServicing, character: Character) {
         self.service = service
         self.character = character
     }
@@ -115,6 +113,7 @@ private extension CharacterViewModel {
                 }
                 
             case .failure:
+                // TODO: Feedback de erro
                 break
             }
             

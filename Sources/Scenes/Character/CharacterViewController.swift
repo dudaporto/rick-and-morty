@@ -35,21 +35,6 @@ final class CharacterViewController: UIViewController {
         return name
     }()
     
-    private lazy var favoriteIcon: UIImageView = {
-        let image = UIImageView()
-        image.image = Images.heartFilled.image
-        image.tintColor = Palette.green1.color
-        return image
-    }()
-    
-    private lazy var nameStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [characterTitle, favoriteIcon])
-        stackView.axis = .horizontal
-        stackView.alignment = .center
-        stackView.spacing = Spacing.space2
-        return stackView
-    }()
-    
     private lazy var statusIndicator: UIView = {
         let cicledView = UIView()
         cicledView.border(radius: Radius.low)
@@ -72,7 +57,7 @@ final class CharacterViewController: UIViewController {
     }()
     
     private lazy var headerStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [nameStackView, statusBadgeStackView])
+        let stackView = UIStackView(arrangedSubviews: [characterTitle, statusBadgeStackView])
         stackView.axis = .vertical
         stackView.spacing = Spacing.space2
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -105,9 +90,7 @@ final class CharacterViewController: UIViewController {
     }()
     
     private var topBarHeight: CGFloat {
-        let navBarHeight = navigationController?.navigationBar.frame.height ?? 0
-        let safeAreaTop = UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0
-        return navBarHeight + safeAreaTop
+        UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0
     }
     
     private let viewModel: CharacterViewModelType
@@ -151,7 +134,6 @@ final class CharacterViewController: UIViewController {
     }
     
     private func setupNavigationBar() {
-        navigationController?.navigationBar.prefersLargeTitles = false
         navigationController?.navigationBar.tintColor = .white
         navigationController?.navigationBar.barStyle = .black
         navigationController?.navigationBar.backgroundColor = .clear
@@ -198,7 +180,6 @@ extension CharacterViewController: ViewSetup {
         ])
         
         statusIndicator.size(12)
-        favoriteIcon.size(30)
     }
     
     func setupHierarchy() {
@@ -231,10 +212,6 @@ extension CharacterViewController {
 
 // MARK: - UITableViewDelegate
 extension CharacterViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    
-    }
-    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         UITableView.automaticDimension
     }
