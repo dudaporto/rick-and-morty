@@ -101,6 +101,9 @@ _Clique para expandir!_
   
  </details>
 
+<p>Desenvolver feedback de erro para carregamento de mais personagens</p>
+<p>Desenvolver feedback de erro para carregamento de episódios</p>
+
 ## Vídeo demonstrativo
 
 https://user-images.githubusercontent.com/56546505/167320080-47d3eded-4527-49bf-b28d-65a1297d97e9.mp4
