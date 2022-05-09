@@ -37,8 +37,7 @@ final class CharacterViewModelTests: XCTestCase {
     private let viewControllerSpy = CharacterViewControllerTypeSpy()
     
     private lazy var sut: CharacterViewModel = {
-        let viewModel = CharacterViewModel(coordinator: CharacterCoordinator(),
-                                           service: serviceMock,
+        let viewModel = CharacterViewModel(service: serviceMock,
                                            character: .mock)
         viewModel.viewController = viewControllerSpy
         return viewModel

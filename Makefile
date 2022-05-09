@@ -1,5 +1,5 @@
 gen: 
 	xcodegen
-	swiftgen config run --config swiftgen.yml
+	swiftgen
 	echo "Opening project..."
 	open RickAndMorty.xcodeproj  

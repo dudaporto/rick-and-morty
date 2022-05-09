@@ -28,7 +28,7 @@ private enum InfoSection: String, CaseIterable {
     }
 }
 
-final class CharacterViewModel {\
+final class CharacterViewModel {
     private let service: CharacterServicing
     private let character: Character
     
