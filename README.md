@@ -84,7 +84,7 @@ _Clique para expandir!_
 
  <details>
   <summary>Carregamento de personagem que possui apenas 1 episódio</summary>
-  Quando entramos na página do personagem, é feita um request para buscar informações dos episódios (pelo id) que ele aparece. Porém, quando o personagem possui apenas um EP, o modelo o json é de apenas um objeto, e não uma lista como nos outros casos. Dessa forma, ocorre um erro de decoding e essa seção não é exibida.</br>Exemplo:
+  Quando entramos na página do personagem, é feita uma request para buscar informações dos episódios (pelo id) que ele aparece. Porém, quando o personagem possui apenas um EP, o modelo do json é de apenas um objeto, e não uma lista como nos outros casos. Dessa forma, ocorre um erro de decoding e essa seção não é exibida.</br>Exemplo:
   
 <ul>
   <li> <a target="_blank" href=https://rickandmortyapi.com/api/episode/10,28>Request de vários episódios</a></li>
