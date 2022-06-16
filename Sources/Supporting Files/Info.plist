@@ -8,7 +8,7 @@
 		<string>SFPRODISPLAYBOLD.OTF</string>
 	</array>
 	<key>CFBundleDisplayName</key>
-	<string></string>
+	<string>Rick</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>

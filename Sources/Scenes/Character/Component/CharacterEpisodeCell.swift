@@ -13,6 +13,7 @@ final class CharacterEpisodeCell: UITableViewCell {
         let label = UILabel()
         label.font = Typography.title
         label.textColor = Palette.gray2.color
+        label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         return label
     }()
     

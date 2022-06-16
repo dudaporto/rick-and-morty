@@ -107,10 +107,8 @@ private extension CharacterViewModel {
             guard let self = self else { return }
             
             switch result {
-            case .success(let episodes):
-                self.episodesContent = episodes.enumerated().map { index, ep in
-                    CharacterEpisodeContent(episode: ep, hideSeparatorView: index == episodes.count - 1)
-                }
+            case .success(let reponse):
+                self.handleEpisodesResponse(reponse)
                 
             case .failure:
                 // TODO: Feedback de erro
@@ -119,6 +117,21 @@ private extension CharacterViewModel {
             
             self.viewController?.displayEpisodes()
         }
+    }
+    
+    func handleEpisodesResponse(_ response: EpisodeListResponse) {
+        let episodes: [Episode]
+        switch response {
+        case .episode(let episode):
+            episodes = [episode]
+        case .episodeArray(let array):
+            episodes = array
+        }
+        
+        self.episodesContent = episodes.enumerated().map { index, ep in
+            CharacterEpisodeContent(episode: ep, hideSeparatorView: index == episodes.count - 1)
+        }
+        
     }
     
     func getEpisodesIds() -> [Int] {
