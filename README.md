@@ -83,7 +83,7 @@ O projeto desevolvido possui:
 _Clique para expandir!_
 
  <details>
-  <summary>Carregamento de personagem que possui apenas 1 episódio</summary>
+  <summary>Carregamento de personagem que possui apenas 1 episódio (Resolvido <a target="_blank" href=https://github.com/dudaporto/rick-and-morty/commit/c9f9a36f33b7397e05a035466c46139b4cbc70ea>c9f9a36</a> ✅) </summary>
   Quando entramos na página do personagem, é feita uma request para buscar informações dos episódios (pelo id) que ele aparece. Porém, quando o personagem possui apenas um EP, o modelo do json é de apenas um objeto, e não uma lista como nos outros casos. Dessa forma, ocorre um erro de decoding e essa seção não é exibida.</br>Exemplo:
   
 <ul>
